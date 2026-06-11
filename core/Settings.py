@@ -13,8 +13,7 @@ RENDER_WIDTH  = 1280
 RENDER_HEIGHT = 720
 FPS           = 60
 
-# --- Mundo ---
-TILE_SIZE = 32   # tamanho base de tile em pixels (resolução de render)
+
 
 
 
