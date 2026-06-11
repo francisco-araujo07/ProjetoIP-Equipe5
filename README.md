@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <!-- Substitua pela logo/imagem do projeto -->
-  <h2 align="center"> [NOME DO PROJETO]</h2>
+  <h2 align="center"> Phyntom </h2>
   <h3 align="center">Projeto de jogo com Python e Programação Orientada a Objetos (POO)</h3>
 
   <p align="center">
