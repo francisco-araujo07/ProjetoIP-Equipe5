@@ -7,10 +7,10 @@
 # ============================================================
 
 # --- Display ---
-SCREEN_WIDTH  = 1280
-SCREEN_HEIGHT = 720
-RENDER_WIDTH  = 1280
-RENDER_HEIGHT = 720
+SCREEN_WIDTH  = 0
+SCREEN_HEIGHT = 0
+RENDER_WIDTH  = 0
+RENDER_HEIGHT = 0
 FPS           = 60
 
 
