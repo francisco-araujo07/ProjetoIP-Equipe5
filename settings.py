@@ -7,12 +7,12 @@
 # ============================================================
 
 # --- Display ---
-SCREEN_WIDTH  = 0
-SCREEN_HEIGHT = 0
+LARGURA_TELA = 1280
+ALTURA_TELA = 720
 RENDER_WIDTH  = 0
 RENDER_HEIGHT = 0
 FPS           = 60
-
+TITULO_TESTE = "Phyntom"
 
 
 
