@@ -16,7 +16,6 @@ TITULO_TESTE = "Phyntom"
 
 
 
-
 # --- Cores (R, G, B) ---
 WHITE  = (255, 255, 255)
 BLACK  = (0,   0,   0)
@@ -26,3 +25,17 @@ BLUE   = (50,  100, 220)
 YELLOW = (255, 220, 0)
 GRAY   = (150, 150, 150)
 ORANGE = (255, 120, 0)
+
+
+
+# --- Física do Player ---
+VELOCIDADE_PLAYER = 5
+GRAVIDADE = 0.5
+FORCA_PULO = 15
+VELOCIDADE_MAX_QUEDA = 20
+
+
+
+# --- Atributos do Player ---
+PLAYER_VIDA_MAX = 100
+PLAYER_DANO = 10
