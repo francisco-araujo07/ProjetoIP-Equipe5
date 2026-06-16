@@ -39,3 +39,13 @@ VELOCIDADE_MAX_QUEDA = 20
 # --- Atributos do Player ---
 PLAYER_VIDA_MAX = 100
 PLAYER_DANO = 10
+
+# --- Tipos de Coletável ---
+TIPO_VIDA       = "vida"
+TIPO_DANO       = "dano"
+TIPO_VELOCIDADE = "velocidade"
+
+# --- Valores de Upgrade(Caso necessário alterar) ---
+UPGRADE_VIDA       = 20
+UPGRADE_DANO       = 5
+UPGRADE_VELOCIDADE = 1
