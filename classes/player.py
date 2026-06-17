@@ -11,7 +11,6 @@ class Player(pygame.sprite.Sprite):
         self.image.fill(settings.BLUE)
 
         # Rect define a posição e a área de de colisão do jogador
-        
         self.rect= self.image.get_rect(topleft=(x, y))
 
         # Atributos de movimento
