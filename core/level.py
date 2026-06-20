@@ -29,6 +29,11 @@ class Level:
             plataforma = Plataforma(x, y, largura, altura)
             self.plataformas.add(plataforma)
 
+    def processar_evento(self, evento):
+        tecla_ataque = pygame.key.key_code(settings.TECLA_ATAQUE_PLAYER)
+        if evento.type == pygame.KEYDOWN and evento.key == tecla_ataque:
+            self.player.atacar()
+
     #função pra implementação da colisão no futuro
     # def _checar_coletaveis(self):
     #     pegos = pygame.sprite.spritecollide(self.player, self.grupo_coletaveis, True)
@@ -45,6 +50,10 @@ class Level:
         self.plataformas.draw(tela)  # Desenha as plataformas
         tela.blit(self.player.image, self.player.rect)  # Desenha o jogador
 
+        hitbox = self.player.hitbox_ataque()
+        if hitbox is not None:
+            pygame.draw.rect(tela, settings.ORANGE, hitbox, 2)
+
 
     def terminou(self):
-        return False 
+        return False
