@@ -1,9 +1,9 @@
 import pygame
 
-class Platform(pygame.sprite.Sprite):
+class Plataforma(pygame.sprite.Sprite):
 
     # Representa uma plataforma sólida.
-    def __init__(self, x, y, largura, altura):
+    def __init__(self, x, y, largura, altura, caminho_imagem = None):
 
         super().__init__()
 
