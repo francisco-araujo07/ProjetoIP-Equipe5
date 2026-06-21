@@ -4,55 +4,43 @@ from classes.player import Player
 from classes.coletavel import Collectible
 from classes.plataforma import Plataforma, resolver_colisao_chao
 
-# Classe que representa o nível do jogo, responsável por atualizar e desenhar os elementos do nível.
+# Classe base para todos os níveis do jogo.
+# Cada tela concreta herda desta classe e define apenas FUNDO e LAYOUT_PLATAFORMAS.
 class Level:
+
+    FUNDO = None            # Caminho da imagem de fundo — obrigatório nas subclasses
+    LAYOUT_PLATAFORMAS = [] # Lista de tuplas (x, y, largura, altura[, caminho_imagem])
+
     def __init__(self):
         self.player = Player(100, settings.ALTURA_TELA - 400)  # Posição inicial do jogador (x, y)
         self.plataformas = pygame.sprite.Group()
         self.coletaveis = pygame.sprite.Group()
 
-        # Guardando parâmetros das plataformas, nesse caso so tem o chão por que é so para teste.
-        self.layout_plataformas = [
-            #(x, y, largura, altura, caminho da imagem)
-            (0, settings.ALTURA_TELA - 152, settings.LARGURA_TELA, 152),  # Chão invisível — visual vem do fundo
-        ]
-
         self.criar_plataformas()
 
-        fundo = pygame.image.load("assets/fase1/fase1-bg1.png").convert()
+        # Carrega e escala o fundo uma única vez para não repetir a operação a cada frame
+        fundo = pygame.image.load(self.FUNDO).convert()
         self.fundo = pygame.transform.scale(fundo, (settings.LARGURA_TELA, settings.ALTURA_TELA))
 
-
-
-
-
-    """ Cria as plataformas a partir dos parâmetros definidos em layout_plataformas.
+    """ Cria as plataformas a partir dos parâmetros definidos em LAYOUT_PLATAFORMAS.
     Cada entrada pode ter 4 valores (sem imagem) ou 5 (com imagem).
     Sem imagem a plataforma fica invisível e serve apenas para colisão. """
     def criar_plataformas(self):
-        for entrada in self.layout_plataformas:
+        for entrada in self.LAYOUT_PLATAFORMAS:
             x, y, largura, altura = entrada[:4]  # Primeiros 4 valores são sempre obrigatórios
             caminho_imagem = entrada[4] if len(entrada) > 4 else None  # 5º valor (imagem) é opcional
             plataforma = Plataforma(x, y, largura, altura, caminho_imagem)
             self.plataformas.add(plataforma)
 
-    #função pra implementação da colisão no futuro
-    # def _checar_coletaveis(self):
-    #     pegos = pygame.sprite.spritecollide(self.player, self.grupo_coletaveis, True)
-    #     for item in pegos:
-    #         item.aplicar_efeito(self.player) 
-
     def atualizar(self):
-        self.player.update() # Atualiza o estado do jogador (movimento, física, etc.)
-        resolver_colisao_chao(self.player, self.plataformas) # Verifica e resolve colisões entre o jogador e as plataformas
-        
+        self.player.update()                             # Atualiza o estado do jogador (movimento, física, etc.)
+        resolver_colisao_chao(self.player, self.plataformas)  # Verifica e resolve colisões com as plataformas
 
     def desenhar(self, tela):
-        tela.blit(self.fundo, (0, 0))
-        
-        self.plataformas.draw(tela)  # Desenha as plataformas
+        tela.blit(self.fundo, (0, 0))          # Desenha o fundo
+        self.plataformas.draw(tela)            # Desenha as plataformas
         tela.blit(self.player.image, self.player.rect)  # Desenha o jogador
 
-
+    # Retorna True quando o jogador completou a tela; subclasses sobrescrevem quando necessário
     def terminou(self):
-        return False 
+        return False
