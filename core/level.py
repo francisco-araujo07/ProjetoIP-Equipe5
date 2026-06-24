@@ -1,5 +1,6 @@
 import pygame
 import settings
+import game_state
 from classes.player import Player
 from classes.coletavel import Collectible
 from classes.plataforma import Plataforma, resolver_colisao_chao
@@ -53,6 +54,14 @@ class Level:
         self.plataformas.draw(tela)  # Desenha as plataformas
         tela.blit(self.player.image, self.player.rect)  # Desenha o jogador
 
+    def leitura_dano (self):
+        tocados = pygame.sprite.spritecollide(self.player, self.grupo_inimigos, False) # Lê os inimigos que tiveram colisão
+
+        for inimigo in tocados:
+            self.player.levar_dano(inimigo.dano) # Registra o dano tirando a vida do Player
+        
+        if not self.player.esta_vivo():
+            self.estado = game_state.GAME_OVER # Regista se o jogador morreu pra dar game over
 
     def terminou(self):
         return False 
