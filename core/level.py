@@ -1,21 +1,21 @@
 import pygame
 import settings
-import game_state
+from core.game_state import GameState
 from classes.player import Player
 from classes.coletavel import Collectible
 from classes.plataforma import Plataforma, resolver_colisao_chao
 
-# Classe que representa o nível do jogo, responsável por atualizar e desenhar os elementos do nível.
+
 class Level:
     def __init__(self):
-        self.player = Player(100, settings.ALTURA_TELA - 400)  # Posição inicial do jogador (x, y)
+        self.estado = GameState.PLAYING
+        self.player = Player(100, settings.ALTURA_TELA - 400)
         self.plataformas = pygame.sprite.Group()
         self.coletaveis = pygame.sprite.Group()
+        self.grupo_inimigos = pygame.sprite.Group()
 
-        # Guardando parâmetros das plataformas, nesse caso so tem o chão por que é so para teste.
         self.layout_plataformas = [
-            #(x, y, largura, altura, caminho da imagem)
-            (0, settings.ALTURA_TELA - 152, settings.LARGURA_TELA, 152),  # Chão invisível — visual vem do fundo
+            (0, settings.ALTURA_TELA - 152, settings.LARGURA_TELA, 152),
         ]
 
         self.criar_plataformas()
@@ -23,45 +23,41 @@ class Level:
         fundo = pygame.image.load("assets/fase1/fase1-bg1.png").convert()
         self.fundo = pygame.transform.scale(fundo, (settings.LARGURA_TELA, settings.ALTURA_TELA))
 
-
-
-
-
-    """ Cria as plataformas a partir dos parâmetros definidos em layout_plataformas.
-    Cada entrada pode ter 4 valores (sem imagem) ou 5 (com imagem).
-    Sem imagem a plataforma fica invisível e serve apenas para colisão. """
     def criar_plataformas(self):
         for entrada in self.layout_plataformas:
-            x, y, largura, altura = entrada[:4]  # Primeiros 4 valores são sempre obrigatórios
-            caminho_imagem = entrada[4] if len(entrada) > 4 else None  # 5º valor (imagem) é opcional
+            x, y, largura, altura = entrada[:4]
+            caminho_imagem = entrada[4] if len(entrada) > 4 else None
             plataforma = Plataforma(x, y, largura, altura, caminho_imagem)
             self.plataformas.add(plataforma)
 
-    #função pra implementação da colisão no futuro
-    # def _checar_coletaveis(self):
-    #     pegos = pygame.sprite.spritecollide(self.player, self.grupo_coletaveis, True)
-    #     for item in pegos:
-    #         item.aplicar_efeito(self.player) 
+    def processar_evento(self, evento):
+        tecla_ataque = pygame.key.key_code(settings.TECLA_ATAQUE_PLAYER)
+        if evento.type == pygame.KEYDOWN and evento.key == tecla_ataque:
+            self.player.atacar()
 
     def atualizar(self):
-        self.player.update() # Atualiza o estado do jogador (movimento, física, etc.)
-        resolver_colisao_chao(self.player, self.plataformas) # Verifica e resolve colisões entre o jogador e as plataformas
-        
+        self.player.update()
+        resolver_colisao_chao(self.player, self.plataformas)
+        self.leitura_dano()
 
     def desenhar(self, tela):
         tela.blit(self.fundo, (0, 0))
-        
-        self.plataformas.draw(tela)  # Desenha as plataformas
-        tela.blit(self.player.image, self.player.rect)  # Desenha o jogador
 
-    def leitura_dano (self):
-        tocados = pygame.sprite.spritecollide(self.player, self.grupo_inimigos, False) # Lê os inimigos que tiveram colisão
+        self.plataformas.draw(tela)
+        tela.blit(self.player.image, self.player.rect)
+
+        hitbox = self.player.hitbox_ataque()
+        if hitbox is not None:
+            pygame.draw.rect(tela, settings.ORANGE, hitbox, 2)
+
+    def leitura_dano(self):
+        tocados = pygame.sprite.spritecollide(self.player, self.grupo_inimigos, False)
 
         for inimigo in tocados:
-            self.player.levar_dano(inimigo.dano) # Registra o dano tirando a vida do Player
-        
+            self.player.levar_dano(inimigo.dano)
+
         if not self.player.esta_vivo():
-            self.estado = game_state.GAME_OVER # Regista se o jogador morreu pra dar game over
+            self.estado = GameState.GAME_OVER
 
     def terminou(self):
-        return False 
+        return False

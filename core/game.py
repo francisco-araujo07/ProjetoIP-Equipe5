@@ -26,9 +26,10 @@ class Game:
 
     # Processa os eventos do jogo, como fechar a janela.
     def processar_eventos(self):
-            for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
-                    self.rodando = False
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                self.rodando = False
+            self.nivel.processar_evento(evento)
     
     # Atualiza o estado do jogo.
     def atualizar(self):
