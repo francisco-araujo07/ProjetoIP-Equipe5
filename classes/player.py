@@ -50,3 +50,20 @@ class Player(pygame.sprite.Sprite):
 
         # Física vertical
         self.aplicar_gravidade()
+
+    def levar_dano(self,valor):
+        
+        agora = pygame.time.get_ticks()
+
+
+        if not self.invencivel: # Só registra o valor caso ele não esteja no tempo de invencibilidade
+            self.vida -= valor
+
+            if self.vida < 0: # Impede a vida ser negativa
+                self.vida = 0
+
+            self.invencivel = True
+            self.tempo_dano = agora
+    
+    def esta_vivo(self): # Só retorna False quando a vida é 0
+        return self.vida > 0
