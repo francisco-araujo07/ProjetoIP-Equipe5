@@ -1,32 +1,33 @@
 import pygame
 import settings
+from core.game_state import GameState
 from classes.player import Player
 from classes.coletavel import Collectible
 from classes.plataforma import Plataforma, resolver_colisao_chao
 
-# Classe que representa o nível do jogo, responsável por atualizar e desenhar os elementos do nível.
+
 class Level:
     def __init__(self):
-        self.player = Player(100, settings.ALTURA_TELA - 80)  # Posição inicial do jogador (x, y)
+        self.estado = GameState.PLAYING
+        self.player = Player(100, settings.ALTURA_TELA - 400)
         self.plataformas = pygame.sprite.Group()
         self.coletaveis = pygame.sprite.Group()
+        self.grupo_inimigos = pygame.sprite.Group()
 
-        # Guardando parâmetros das plataformas, nesse caso so tem o chão por que é so para teste.
         self.layout_plataformas = [
-            #(x, y, largura, altura)
-            (0, settings.ALTURA_TELA - 80, settings.LARGURA_TELA, 80),  # Chão
+            (0, settings.ALTURA_TELA - 152, settings.LARGURA_TELA, 152),
         ]
 
         self.criar_plataformas()
 
-        
+        fundo = pygame.image.load("assets/fase1/fase1-bg1.png").convert()
+        self.fundo = pygame.transform.scale(fundo, (settings.LARGURA_TELA, settings.ALTURA_TELA))
 
-
-
-    #Função que cria as plataformas a partir dos parâmetros definidos em layout_plataformas
     def criar_plataformas(self):
-        for (x, y, largura, altura) in self.layout_plataformas:
-            plataforma = Plataforma(x, y, largura, altura)
+        for entrada in self.layout_plataformas:
+            x, y, largura, altura = entrada[:4]
+            caminho_imagem = entrada[4] if len(entrada) > 4 else None
+            plataforma = Plataforma(x, y, largura, altura, caminho_imagem)
             self.plataformas.add(plataforma)
 
     def processar_evento(self, evento):
@@ -34,26 +35,29 @@ class Level:
         if evento.type == pygame.KEYDOWN and evento.key == tecla_ataque:
             self.player.atacar()
 
-    #função pra implementação da colisão no futuro
-    # def _checar_coletaveis(self):
-    #     pegos = pygame.sprite.spritecollide(self.player, self.grupo_coletaveis, True)
-    #     for item in pegos:
-    #         item.aplicar_efeito(self.player) 
-
     def atualizar(self):
-        self.player.update() # Atualiza o estado do jogador (movimento, física, etc.)
-        resolver_colisao_chao(self.player, self.plataformas) # Verifica e resolve colisões entre o jogador e as plataformas
-        
+        self.player.update()
+        resolver_colisao_chao(self.player, self.plataformas)
+        self.leitura_dano()
 
     def desenhar(self, tela):
-        tela.fill(settings.BLACK)  # Limpa a tela com preto
-        self.plataformas.draw(tela)  # Desenha as plataformas
-        tela.blit(self.player.image, self.player.rect)  # Desenha o jogador
+        tela.blit(self.fundo, (0, 0))
+
+        self.plataformas.draw(tela)
+        tela.blit(self.player.image, self.player.rect)
 
         hitbox = self.player.hitbox_ataque()
         if hitbox is not None:
             pygame.draw.rect(tela, settings.ORANGE, hitbox, 2)
 
+    def leitura_dano(self):
+        tocados = pygame.sprite.spritecollide(self.player, self.grupo_inimigos, False)
+
+        for inimigo in tocados:
+            self.player.levar_dano(inimigo.dano)
+
+        if not self.player.esta_vivo():
+            self.estado = GameState.GAME_OVER
 
     def terminou(self):
         return False

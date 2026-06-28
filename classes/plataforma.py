@@ -3,16 +3,17 @@ import pygame
 class Plataforma(pygame.sprite.Sprite):
 
     # Representa uma plataforma sólida.
-    def __init__(self, x, y, largura, altura, caminho_imagem = None):
+    def __init__(self, x, y, largura, altura, caminho_imagem=None):
 
         super().__init__()
 
         # self.image é o visual do sprite.
-        # pygame.Surface cria uma superfície do tamanho dado.
-        self.image = pygame.Surface((largura, altura))
-
-        # fill() preenche a superfície com uma cor RGB.
-        self.image.fill((80, 80, 80))
+        # Se caminho_imagem for None, a plataforma fica invisível (só colisão).
+        if caminho_imagem:
+            self.image = pygame.image.load(caminho_imagem).convert_alpha()
+            self.image = pygame.transform.scale(self.image, (largura, altura))  # Redimensiona para o tamanho da plataforma
+        else:
+            self.image = pygame.Surface((largura, altura), pygame.SRCALPHA)  # Superfície transparente
 
         # self.rect define a posição e o tamanho do sprite no mundo.
         # get_rect() pega o retângulo da imagem
