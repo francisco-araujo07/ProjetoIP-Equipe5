@@ -1,5 +1,6 @@
 import pygame
 import settings
+from core.game_state import GameState
 from classes.player import Player
 from classes.coletavel import Collectible
 from classes.plataforma import Plataforma, resolver_colisao_chao
@@ -12,9 +13,15 @@ class Level:
     LAYOUT_PLATAFORMAS = [] # Lista de tuplas (x, y, largura, altura[, caminho_imagem])
 
     def __init__(self):
-        self.player = Player(100, settings.ALTURA_TELA - 400)  # Posição inicial do jogador (x, y)
+        self.estado = GameState.PLAYING
+        self.player = Player(100, settings.ALTURA_TELA - 400)
         self.plataformas = pygame.sprite.Group()
         self.coletaveis = pygame.sprite.Group()
+        self.grupo_inimigos = pygame.sprite.Group()
+
+        self.layout_plataformas = [
+            (0, settings.ALTURA_TELA - 152, settings.LARGURA_TELA, 152),
+        ]
 
         self.criar_plataformas()
 
@@ -22,25 +29,41 @@ class Level:
         fundo = pygame.image.load(self.FUNDO).convert()
         self.fundo = pygame.transform.scale(fundo, (settings.LARGURA_TELA, settings.ALTURA_TELA))
 
-    """ Cria as plataformas a partir dos parâmetros definidos em LAYOUT_PLATAFORMAS.
-    Cada entrada pode ter 4 valores (sem imagem) ou 5 (com imagem).
-    Sem imagem a plataforma fica invisível e serve apenas para colisão. """
     def criar_plataformas(self):
-        for entrada in self.LAYOUT_PLATAFORMAS:
-            x, y, largura, altura = entrada[:4]  # Primeiros 4 valores são sempre obrigatórios
-            caminho_imagem = entrada[4] if len(entrada) > 4 else None  # 5º valor (imagem) é opcional
+        for entrada in self.layout_plataformas:
+            x, y, largura, altura = entrada[:4]
+            caminho_imagem = entrada[4] if len(entrada) > 4 else None
             plataforma = Plataforma(x, y, largura, altura, caminho_imagem)
             self.plataformas.add(plataforma)
 
+    def processar_evento(self, evento):
+        tecla_ataque = pygame.key.key_code(settings.TECLA_ATAQUE_PLAYER)
+        if evento.type == pygame.KEYDOWN and evento.key == tecla_ataque:
+            self.player.atacar()
+
     def atualizar(self):
-        self.player.update()                             # Atualiza o estado do jogador (movimento, física, etc.)
-        resolver_colisao_chao(self.player, self.plataformas)  # Verifica e resolve colisões com as plataformas
+        self.player.update()
+        resolver_colisao_chao(self.player, self.plataformas)
+        self.leitura_dano()
 
     def desenhar(self, tela):
-        tela.blit(self.fundo, (0, 0))          # Desenha o fundo
-        self.plataformas.draw(tela)            # Desenha as plataformas
-        tela.blit(self.player.image, self.player.rect)  # Desenha o jogador
+        tela.blit(self.fundo, (0, 0))
 
-    # Retorna True quando o jogador completou a tela; subclasses sobrescrevem quando necessário
+        self.plataformas.draw(tela)
+        tela.blit(self.player.image, self.player.rect)
+
+        hitbox = self.player.hitbox_ataque()
+        if hitbox is not None:
+            pygame.draw.rect(tela, settings.ORANGE, hitbox, 2)
+
+    def leitura_dano(self):
+        tocados = pygame.sprite.spritecollide(self.player, self.grupo_inimigos, False)
+
+        for inimigo in tocados:
+            self.player.levar_dano(inimigo.dano)
+
+        if not self.player.esta_vivo():
+            self.estado = GameState.GAME_OVER
+
     def terminou(self):
         return False

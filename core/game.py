@@ -51,6 +51,12 @@ class Game:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 self.rodando = False
+            self.nivel.processar_evento(evento)
+    
+    # Atualiza o estado do jogo.
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                self.rodando = False
 
     # Atualiza o estado do jogo e verifica se deve avançar de tela
     def atualizar(self):
