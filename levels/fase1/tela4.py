@@ -1,14 +1,22 @@
 import settings
+from classes.enemy import Saqueador
 from core.level import Level
 
-# Tela 4 da Fase 1
-# TODO: substituir FUNDO pelo asset correto em assets/fase1/tela4/
-# TODO: definir LAYOUT_PLATAFORMAS com as plataformas desta tela
-class Fase1Tela4(Level):
 
-    FUNDO = "assets/fase1/fase1-bg1.png"  # placeholder — trocar quando o asset estiver pronto
+class Fase1Tela4(Level):
+    FUNDO = "assets/fase1/fase1-bg1.png"
 
     LAYOUT_PLATAFORMAS = [
-        # (x, y, largura, altura[, caminho_imagem])
-        (0, settings.ALTURA_TELA - 152, settings.LARGURA_TELA, 152),  # Chão invisível
+        (0, settings.ALTURA_TELA - 152, 520, 152),
+        (760, settings.ALTURA_TELA - 152, settings.LARGURA_TELA - 760, 152),
+        (580, settings.ALTURA_TELA - 300, 120, 24),
     ]
+
+    def __init__(self, player_state=None):
+        super().__init__(player_state)
+        y_chao = settings.ALTURA_TELA - 152
+        saqueador = Saqueador(900, y_chao - 56, 780, settings.LARGURA_TELA - 80)
+        self.grupo_inimigos.add(saqueador)
+
+    def terminou(self):
+        return super().terminou() and len(self.grupo_inimigos) == 0
