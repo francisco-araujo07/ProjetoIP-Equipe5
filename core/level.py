@@ -3,6 +3,7 @@ import pygame
 import settings
 from classes.player import Player
 from classes.plataforma import Plataforma, resolver_colisao_chao
+from classes.coletavel import Pocao, FragmentoChave, Gema 
 from core.game_state import GameState
 
 
@@ -79,6 +80,7 @@ class Level:
         self.player.update()
         self.grupo_inimigos.update()
         resolver_colisao_chao(self.player, self.plataformas)
+        self.checar_colisao_coletaveis()
         self.leitura_ataque()
         self.leitura_dano()
         self.salvar_estado_jogador()
@@ -100,6 +102,7 @@ class Level:
 
         self.plataformas.draw(tela)
         self.grupo_inimigos.draw(tela)
+        self.coletaveis.draw(tela)
 
         if not self.player.invencivel or (pygame.time.get_ticks() // 120) % 2 == 0:
             tela.blit(self.player.image, self.player.rect)
@@ -143,6 +146,16 @@ class Level:
         texto_visivel = texto_atual[:self.dialogo_caracteres]
         superficie = self.fonte_dialogo.render(texto_visivel, True, settings.WHITE)
         tela.blit(superficie, (caixa.x + 24, caixa.y + 28))
+    def checar_colisao_coletaveis(self):                     # ← ADICIONADO
+        """Detecta colisão entre o player e coletáveis"""
+        coletados = pygame.sprite.spritecollide(
+            self.player,
+            self.coletaveis,
+            False,
+            pygame.sprite.collide_rect,
+        )
+        for item in coletados:
+            item.coletar(self.player)
 
     def leitura_ataque(self):
         hitbox = self.player.hitbox_ataque()
