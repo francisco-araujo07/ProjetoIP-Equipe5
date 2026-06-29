@@ -14,6 +14,10 @@ RENDER_HEIGHT = 0
 FPS           = 60
 TITULO_TESTE = "Phyntom"
 
+# --- Assets ---
+SPRITE_PLAYER_SEM_ESPADA = "assets/fase1/player-sem-espada.png"
+SPRITE_PLAYER_COM_ESPADA = "assets/fase1/player-com-espada.png"
+
 
 
 # --- Cores (R, G, B) ---
@@ -42,10 +46,22 @@ PLAYER_DANO = 10
 
 # --- Ataque melee do Player ---
 TECLA_ATAQUE_PLAYER = "z"
+TECLA_PULAR_PLAYER = "space"
 PLAYER_ATAQUE_ALCANCE = 45
 PLAYER_ATAQUE_ALTURA = 32
 PLAYER_ATAQUE_DURACAO_MS = 120
 PLAYER_ATAQUE_COOLDOWN_MS = 400
+
+# --- Dialogo ---
+TYPEWRITER_LETRAS_POR_SEGUNDO = 30
+
+# --- Inimigos ---
+SAQUEADOR_VIDA = 10
+SAQUEADOR_DANO = 15
+SAQUEADOR_VELOCIDADE = 2
+AUTOMATO_VIDA = 30
+AUTOMATO_DANO = 20
+AUTOMATO_VELOCIDADE = 1
 
 # --- Tipos de Coletável ---
 TIPO_VIDA       = "vida"

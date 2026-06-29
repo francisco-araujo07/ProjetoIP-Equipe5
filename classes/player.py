@@ -3,24 +3,32 @@ import settings
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, estado=None):
         super().__init__()
 
         self.image = pygame.Surface((40, 56))
-        self.image.fill(settings.BLUE)
         self.rect = self.image.get_rect(topleft=(x, y))
 
         self.velocidade_y = 0
         self.no_chao = False
         self.velocidade = settings.VELOCIDADE_PLAYER
         self.vida_max = settings.PLAYER_VIDA_MAX
+        self.tem_espada = False
+        self.fragmentos_chave = 0
+        self.tem_gema = False
         self.vida = self.vida_max
         self.dano = settings.PLAYER_DANO
+
+        if estado is not None:
+            self.carregar_estado(estado)
+
+        self.atualizar_visual()
 
         self.direcao = 1
         self.ultimo_ataque_ms = -settings.PLAYER_ATAQUE_COOLDOWN_MS
         self.inicio_ataque_ms = 0
         self._hitbox_ataque = None
+        self.inimigos_acertados = set()
 
         self.invencivel = False
         self.tempo_dano = 0
@@ -37,6 +45,9 @@ class Player(pygame.sprite.Sprite):
             self.no_chao = False
 
     def atacar(self):
+        if not self.tem_espada:
+            return False
+
         agora = pygame.time.get_ticks()
         tempo_desde_ultimo_ataque = agora - self.ultimo_ataque_ms
 
@@ -46,6 +57,7 @@ class Player(pygame.sprite.Sprite):
         self.ultimo_ataque_ms = agora
         self.inicio_ataque_ms = agora
         self._hitbox_ataque = self._criar_hitbox_ataque()
+        self.inimigos_acertados = set()
         return True
 
     def hitbox_ataque(self):
@@ -115,3 +127,26 @@ class Player(pygame.sprite.Sprite):
 
     def esta_vivo(self):
         return self.vida > 0
+
+    def atualizar_visual(self):
+        caminho = (
+            settings.SPRITE_PLAYER_COM_ESPADA
+            if self.tem_espada
+            else settings.SPRITE_PLAYER_SEM_ESPADA
+        )
+        self.image = pygame.image.load(caminho).convert_alpha()
+
+    def carregar_estado(self, estado):
+        self.tem_espada = estado.tem_espada
+        self.fragmentos_chave = estado.fragmentos_chave
+        self.tem_gema = estado.tem_gema
+        self.vida = min(estado.vida_atual, self.vida_max)
+        self.dano = estado.dano_atual
+        self.atualizar_visual()
+
+    def salvar_estado(self, estado):
+        estado.tem_espada = self.tem_espada
+        estado.fragmentos_chave = self.fragmentos_chave
+        estado.tem_gema = self.tem_gema
+        estado.vida_atual = self.vida
+        estado.dano_atual = self.dano
