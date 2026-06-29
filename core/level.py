@@ -104,6 +104,8 @@ class Level:
         self.grupo_inimigos.draw(tela)
         self.coletaveis.draw(tela)
 
+        self.player.desenhar_efeito_gema(tela)
+
         if not self.player.invencivel or (pygame.time.get_ticks() // 120) % 2 == 0:
             tela.blit(self.player.image, self.player.rect)
 

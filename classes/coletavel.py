@@ -111,4 +111,6 @@ class Gema(Coletavel):
         pygame.draw.polygon(self.image, brilho, faceta)
  
     def _aplicar_efeito(self, player):
+        if not player.tem_gema:   # evita dobrar o dano duas vezes se recarregar a tela
+            player.dano *= 2
         player.tem_gema = True
