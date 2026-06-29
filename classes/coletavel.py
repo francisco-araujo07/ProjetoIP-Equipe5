@@ -1,33 +1,114 @@
 import pygame
 import settings
-
-class Collectible(pygame.sprite.Sprite):
-    CORES = {
-        settings.TIPO_VIDA: settings.GREEN,
-        settings.TIPO_DANO: settings.RED, 
-        settings.TIPO_VELOCIDADE: settings.BLUE 
-    }
-
-    def __init__(self, x, y, tipo):
-        super().__init__()
-
-        self.tipo = tipo
-
-        # --- Visual ---
-        self.image = pygame.Surface((24,24))
-        cor = self.CORES.get(tipo, settings.WHITE) #
-        self.image.fill(cor)
-
-        self.rect = self.image.get_rect(topleft=(x, y))
-
-    def efeito (self, player):
-        #Aumenta um atributo do player
-
-        if self.tipo == settings.TIPO_VIDA:
-            player.maxv_vida += settings.UPGRADE_VIDA
-        
-        elif self.tipo == settings.TIPO_DANO:
-            player.dano += settings.UPGRADE_DANO
  
-        elif self.tipo == settings.TIPO_VELOCIDADE:
-            player.velocidade += settings.UPGRADE_VELOCIDADE
+ 
+class Coletavel(pygame.sprite.Sprite):
+    
+ 
+    def __init__(self, x, y, largura=28, altura=28):
+        super().__init__()
+        self.image = pygame.Surface((largura, altura), pygame.SRCALPHA)
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self._desenhar()
+ 
+    def _desenhar(self):
+        """Subclasses sobrescreva para definir a aparência."""
+        pass
+ 
+    def coletar(self, player):
+        """Aplica o efeito no player e remove o sprite do mundo."""
+        self._aplicar_efeito(player)
+        self.kill()
+ 
+    def _aplicar_efeito(self, player):
+        """Subclasses sobrescreva para definir o efeito ao ser coletado."""
+        pass
+ 
+ 
+# ---------------------------------------------------------------------------
+# Poção — restaura vida
+# ---------------------------------------------------------------------------
+ 
+class Pocao(Coletavel):
+    """Restaura vida ao player sem ultrapassar vida máxima."""
+ 
+    def __init__(self, x, y, cura=settings.POCAO_CURA):
+        self.cura = cura
+        super().__init__(x, y, largura=24, altura=32)
+ 
+    def _desenhar(self):
+        w, h = self.image.get_size()
+        # Frasco
+        pygame.draw.rect(self.image, (160, 40, 200), (4, 8, w - 8, h - 10), border_radius=4)
+        # Líquido (metade inferior)
+        pygame.draw.rect(self.image, (210, 30, 30), (5, h // 2, w - 10, h // 2 - 9), border_radius=3)
+        # Rolha
+        pygame.draw.rect(self.image, (110, 70, 30), (5, 2, w - 10, 8), border_radius=2)
+        # Brilho
+        pygame.draw.line(self.image, (220, 160, 255), (7, 10), (7, h - 13), 2)
+ 
+    def _aplicar_efeito(self, player):
+        player.vida = min(player.vida + self.cura, player.vida_max)
+ 
+ 
+# ---------------------------------------------------------------------------
+# Fragmento de Chave — acumula em player.fragmentos_chave (int)
+# ---------------------------------------------------------------------------
+ 
+class FragmentoChave(Coletavel):
+    """Incrementa player.fragmentos_chave em 1."""
+ 
+    def __init__(self, x, y):
+        super().__init__(x, y, largura=28, altura=28)
+ 
+    def _desenhar(self):
+        w, h = self.image.get_size()
+        cx, cy = w // 2, h // 2
+        # Cabo (círculo dourado)
+        pygame.draw.circle(self.image, (220, 170, 0), (cx - 4, cy - 3), 8)
+        pygame.draw.circle(self.image, (255, 210, 60), (cx - 4, cy - 3), 8, 2)
+        pygame.draw.circle(self.image, (255, 240, 160), (cx - 7, cy - 6), 3)  # brilho
+        # Haste
+        pygame.draw.rect(self.image, (220, 170, 0), (cx, cy - 2, 10, 4))
+        # Dentes
+        pygame.draw.rect(self.image, (220, 170, 0), (cx + 6, cy + 2, 3, 4))
+        pygame.draw.rect(self.image, (220, 170, 0), (cx + 2, cy + 2, 3, 3))
+ 
+    def _aplicar_efeito(self, player):
+        player.fragmentos_chave += 1
+ 
+ 
+# ---------------------------------------------------------------------------
+# Gema — marca player.tem_gema = True
+# ---------------------------------------------------------------------------
+ 
+class Gema(Coletavel):
+    """Concede a gema ao player (player.tem_gema = True)."""
+ 
+    PALETAS = {
+        "azul":     ((50, 100, 255),  (160, 200, 255)),
+        "vermelha": ((210, 30,  30),  (255, 140, 140)),
+        "verde":    ((30, 160,  50),  (140, 255, 170)),
+        "amarela":  ((220, 190, 10),  (255, 235, 120)),
+    }
+ 
+    def __init__(self, x, y, cor="azul"):
+        self.cor = cor
+        super().__init__(x, y, largura=24, altura=24)
+ 
+    def _desenhar(self):
+        w, h = self.image.get_size()
+        cx, cy = w // 2, h // 2
+        base, brilho = self.PALETAS.get(self.cor, self.PALETAS["azul"])
+ 
+        # Forma de diamante
+        pontos = [(cx, 2), (w - 2, cy), (cx, h - 2), (2, cy)]
+        pygame.draw.polygon(self.image, base, pontos)
+        pygame.draw.polygon(self.image, brilho, pontos, 2)
+ 
+        # Faceta interna (brilho)
+        faceta = [(cx, 5), (cx + 5, cy - 2), (cx, cy - 1), (cx - 5, cy - 2)]
+        pygame.draw.polygon(self.image, brilho, faceta)
+ 
+    def _aplicar_efeito(self, player):
+        player.tem_gema = True

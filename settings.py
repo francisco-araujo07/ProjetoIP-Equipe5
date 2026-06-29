@@ -64,7 +64,7 @@ AUTOMATO_DANO = 20
 AUTOMATO_VELOCIDADE = 1
 
 # --- Tipos de Coletável ---
-TIPO_VIDA       = "vida"
+POCAO_CURA = 50
 TIPO_DANO       = "dano"
 TIPO_VELOCIDADE = "velocidade"
 
