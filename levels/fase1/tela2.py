@@ -3,7 +3,7 @@ from core.level import Level
 
 
 class Fase1Tela2(Level):
-    FUNDO = "assets/fase1/fase1-bg1.png"
+    FUNDO = "assets/fase1/fase1-bg2.png"
     DIALOGOS = [
         "Lembro quando inaugurei este portao. O rei sorriu.",
         "'Ninguem entra aqui sem minha permissao', ele disse.",

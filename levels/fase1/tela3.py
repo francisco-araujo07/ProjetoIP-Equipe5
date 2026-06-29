@@ -5,8 +5,8 @@ from core.level import Level
 
 
 class Fase1Tela3(Level):
-    FUNDO = "assets/fase1/tela3-com-espada.png"
-    FUNDO_SEM_ESPADA = "assets/fase1/tela3-sem-espada.png"
+    FUNDO = "assets/fase1/fase1-bg3.png"
+    FUNDO_SEM_ESPADA = "assets/fase1/fase1-bg3-semEspada.png"
     DIALOGOS = [
         "Os corredores ainda cheiram a pedra umida e tempo perdido.",
         "Tudo exatamente como eu deixei. Cada detalhe, cada sombra.",

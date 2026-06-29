@@ -4,12 +4,12 @@ from core.level import Level
 
 
 class Fase1Tela4(Level):
-    FUNDO = "assets/fase1/fase1-bg1.png"
+    FUNDO = "assets/fase1/fase1-bg4.png"
 
     LAYOUT_PLATAFORMAS = [
         (0, settings.ALTURA_TELA - 152, 520, 152),
         (760, settings.ALTURA_TELA - 152, settings.LARGURA_TELA - 760, 152),
-        (580, settings.ALTURA_TELA - 300, 120, 24),
+        (570, settings.ALTURA_TELA - 300, 140, 24),
     ]
 
     def __init__(self, player_state=None):
