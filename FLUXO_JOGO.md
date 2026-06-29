@@ -81,7 +81,30 @@
 
   **Assets necessários:**
   - Background atual (buraco no meio) + versão com plataforma pequena acima do buraco (ver prompt de imagem abaixo)
-- **Tela 5:** A definir — contém o **Fragmento 1 da Chave Mestra** 🗝️
+- **Tela 5:** Sala interna do castelo — derrota o inimigo e coleta o Fragmento 1 da Chave Mestra 🗝️
+
+  **Painéis de texto — Tela 5 (ao entrar na sala):**
+  1. "No fundo da sala, um brilho dourado pulsa lentamente."
+  2. "Eu sabia que estava aqui. Projetei este esconderijo com as minhas mãos."
+  3. "Um fragmento da Chave Mestra. O rei a dividiu em três partes e as espalhei pelo castelo."
+  4. "Reúna os três fragmentos... e o cofre de Aurum se abrirá."
+  5. "Mas primeiro — alguém está guardando."
+
+  **Layout:**
+  - Um Saqueador guarda a sala
+  - O pedestal com o Fragmento 1 está visível ao fundo, mas só pode ser coletado após derrotar o inimigo
+
+  **Mecânica do pedestal (igual à espada):**
+  - Pedestal faz parte do background
+  - `rect` invisível sobre o pedestal detecta colisão com o player
+  - Prompt `[E] Pegar fragmento` aparece ao colidir
+  - Ao pressionar `E`: fragmento coletado, background troca para versão sem o fragmento no pedestal
+
+  **Fragmento como sprite animado (separado do background):**
+  - O fragmento da chave é um sprite independente posicionado sobre o pedestal
+  - **Oscilação vertical:** usa `math.sin(tempo)` para subir e descer suavemente (~4px de amplitude)
+  - **Brilho oscilante:** um `pygame.Surface` com alpha desenhado em círculos concêntricos atrás do sprite; o alpha do brilho oscila junto com `math.sin(tempo)` entre transparente e visível
+  - Este sistema de animação será o padrão para todos os fragmentos das fases 2 e 3
 
 ---
 
