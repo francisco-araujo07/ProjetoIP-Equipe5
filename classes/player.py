@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import settings
 
@@ -150,3 +152,29 @@ class Player(pygame.sprite.Sprite):
         estado.tem_gema = self.tem_gema
         estado.vida_atual = self.vida
         estado.dano_atual = self.dano
+
+    def desenhar_efeito_gema(self, tela):
+        """Desenha brilho dourado pulsante ao redor do player quando tem_gema=True."""
+        if not self.tem_gema:
+            return
+
+        agora = pygame.time.get_ticks()
+        # sin oscila entre -1 e 1 → alpha entre 60 e 140
+        pulso = math.sin(agora / 300)
+        alpha = int(100 + pulso * 40)
+
+        margem = 8
+        largura_brilho = self.rect.width + margem * 2
+        altura_brilho = self.rect.height + margem * 2
+
+        superficie_brilho = pygame.Surface((largura_brilho, altura_brilho), pygame.SRCALPHA)
+
+        # Três elipses concêntricas com alpha decrescente para suavizar as bordas
+        for camada, fator_alpha in enumerate([alpha, alpha // 2, alpha // 4]):
+            recuo = camada * 3
+            rect_elipse = pygame.Rect(recuo, recuo, largura_brilho - recuo * 2, altura_brilho - recuo * 2)
+            cor_brilho = (255, 210, 50, fator_alpha)  # dourado semi-transparente
+            pygame.draw.ellipse(superficie_brilho, cor_brilho, rect_elipse)
+
+        pos_brilho = (self.rect.x - margem, self.rect.y - margem)
+        tela.blit(superficie_brilho, pos_brilho)
