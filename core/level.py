@@ -45,6 +45,10 @@ class Level:
             self.processar_evento_dialogo(evento)
             return
 
+        if evento.type == pygame.MOUSEBUTTONDOWN:
+            if evento.button == 1:
+                self.player.atacar()
+
         if evento.type != pygame.KEYDOWN:
             return
 
@@ -53,7 +57,7 @@ class Level:
 
         if evento.key == tecla_ataque:
             self.player.atacar()
-        elif evento.key in (tecla_pulo, pygame.K_UP):
+        elif evento.key in (tecla_pulo, pygame.K_UP, pygame.K_w):
             self.player.pular()
 
     def processar_evento_dialogo(self, evento):
@@ -148,6 +152,7 @@ class Level:
         texto_visivel = texto_atual[:self.dialogo_caracteres]
         superficie = self.fonte_dialogo.render(texto_visivel, True, settings.WHITE)
         tela.blit(superficie, (caixa.x + 24, caixa.y + 28))
+    
     def checar_colisao_coletaveis(self):                     # ← ADICIONADO
         """Detecta colisão entre o player e coletáveis"""
         coletados = pygame.sprite.spritecollide(
