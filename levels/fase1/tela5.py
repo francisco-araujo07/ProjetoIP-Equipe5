@@ -44,7 +44,9 @@ class Fase1Tela5(Level):
 
     def _carregar_imagem_fragmento(self):
         imagem = pygame.image.load(self.IMAGEM_FRAGMENTO).convert_alpha()
-        return pygame.transform.smoothscale(imagem, (82, 82))
+        tamanho = (settings.FRAGMENTO_CHAVE_TAMANHO, settings.FRAGMENTO_CHAVE_TAMANHO)
+        imagem = pygame.transform.smoothscale(imagem, tamanho)
+        return pygame.transform.rotate(imagem, settings.FRAGMENTO_CHAVE_ROTACAO)
 
     def processar_evento(self, evento):
         if self.dialogo_ativo:
