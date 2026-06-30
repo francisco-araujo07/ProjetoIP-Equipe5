@@ -52,8 +52,8 @@ class Level:
         if evento.type != pygame.KEYDOWN:
             return
 
-        tecla_ataque1 = pygame.key.key_code(settings.TECLA_ATAQUE_PLAYER)
-        tecla_pulo1 = pygame.key.key_code(settings.TECLA_PULAR_PLAYER)
+        tecla_ataque = pygame.key.key_code(settings.TECLA_ATAQUE_PLAYER)
+        tecla_pulo = pygame.key.key_code(settings.TECLA_PULAR_PLAYER)
 
         if evento.key == tecla_ataque:
             self.player.atacar()
