@@ -44,11 +44,11 @@ class Game:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 self.rodando = False
-            elif evento.type == KEYDOWN:
-                if evento.key == pygame.K_ESCAPE:
-                    pygame.display.toggle_fullscreen()
             else:
                 self.nivel.processar_evento(evento)
+                if evento.type == pygame.KEYDOWN:
+                    if evento.key == pygame.K_ESCAPE:
+                        pygame.display.toggle_fullscreen()
 
     def atualizar(self):
         self.nivel.atualizar()
