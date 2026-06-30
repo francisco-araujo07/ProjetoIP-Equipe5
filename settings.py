@@ -17,6 +17,22 @@ TITULO_TESTE = "Phyntom"
 # --- Assets ---
 SPRITE_PLAYER_SEM_ESPADA = "assets/fase1/player-sem-espada.png"
 SPRITE_PLAYER_COM_ESPADA = "assets/fase1/player-com-espada.png"
+SPRITESHEET_PLAYER_PARADO = "assets/player/spritesheet-jogador-parado.png"
+SPRITESHEET_PLAYER_CORRENDO = "assets/player/spritesheet-jogador-correndo.png"
+SPRITE_PLAYER_ATACANDO = "assets/player/sprite-jogador-atacando.png"
+SPRITESHEET_INIMIGO_ANDANDO = "assets/inimigos/spritesheet-inimigo-andando.png"
+SPRITESHEET_BOSS_ANDANDO = "assets/inimigos/spritesheet-boss-andando.png"
+SPRITESHEET_FRAMES = 7
+PLAYER_LARGURA_BASE = 40
+PLAYER_ALTURA_BASE = 56
+PLAYER_ALTURA_SPRITE = 140
+PLAYER_ANIMATION_SPEED = 0.06
+INIMIGO_ANIMATION_SPEED = 0.05
+FRAGMENTO_CHAVE_TAMANHO = 123
+FRAGMENTO_CHAVE_ROTACAO = -45
+SPRITE_ESPADA_COLETAVEL = "assets/coletavel/espada.png"
+ESPADA_COLETAVEL_ALTURA = 150
+ESPADA_COLETAVEL_ROTACAO = -60
 
 
 
@@ -47,13 +63,19 @@ PLAYER_DANO = 10
 # --- Ataque melee do Player ---
 TECLA_ATAQUE_PLAYER = "z"
 TECLA_PULAR_PLAYER = "space"
-PLAYER_ATAQUE_ALCANCE = 45
-PLAYER_ATAQUE_ALTURA = 32
-PLAYER_ATAQUE_DURACAO_MS = 120
+PLAYER_ATAQUE_ALCANCE = 90
+PLAYER_ATAQUE_ALTURA = 70
+PLAYER_ATAQUE_DURACAO_MS = 220
 PLAYER_ATAQUE_COOLDOWN_MS = 400
 
 # --- Dialogo ---
 TYPEWRITER_LETRAS_POR_SEGUNDO = 30
+
+# --- Telas de resultado ---
+TECLA_REINICIAR_JOGO = "r"
+TECLA_SAIR_JOGO = "escape"
+FONTE_TITULO_RESULTADO = 96
+FONTE_TEXTO_RESULTADO = 36
 
 # --- Inimigos ---
 SAQUEADOR_VIDA = 10

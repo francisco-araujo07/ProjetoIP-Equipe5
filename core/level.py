@@ -113,10 +113,6 @@ class Level:
         if not self.player.invencivel or (pygame.time.get_ticks() // 120) % 2 == 0:
             tela.blit(self.player.image, self.player.rect)
 
-        hitbox = self.player.hitbox_ataque()
-        if hitbox is not None:
-            pygame.draw.rect(tela, settings.ORANGE, hitbox, 2)
-
         self.desenhar_hud(tela)
 
         if self.dialogo_ativo:
@@ -191,4 +187,4 @@ class Level:
             self.player.salvar_estado(self.player_state)
 
     def terminou(self):
-        return self.player.rect.right >= settings.LARGURA_TELA
+        return self.estado == GameState.PLAYING and self.player.rect.right >= settings.LARGURA_TELA

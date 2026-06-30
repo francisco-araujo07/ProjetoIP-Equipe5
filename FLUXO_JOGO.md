@@ -113,9 +113,85 @@
 > Subsolo escuro do castelo, pedra bruta e grades.
 > Dificuldade: Média. Espinhos no cenário, escalada.
 
-- **Tela 1:** A definir
-- **Tela 2:** A definir
-- **Tela 3:** A definir — contém o **Fragmento 2 da Chave Mestra** 🗝️
+- **Tela 1:** Entrada das Catacumbas — sala baixa de masmorra com uma armadilha de espinhos desativável
+
+  **Ideia central:**
+  - A tela apresenta as armadilhas da Fase 2 sem misturar inimigos no mesmo tutorial.
+  - O ambiente deve parecer uma antiga ala de manutenção das masmorras: pedra escura, grades, ferrugem e um mecanismo lateral.
+  - Há uma armadilha de espinhos no caminho principal.
+  - Silas reconhece a armadilha como uma das que ele mesmo projetou para o Rei Aurum.
+  - O jogador pode desativar a armadilha aproximando-se do mecanismo e pressionando `E`.
+
+  **Painéis de texto — Tela 1 (primeira sala das catacumbas):**
+  1. "As catacumbas ainda respiram como uma máquina velha."
+  2. "Pedra úmida, ferro oxidado... e dentes sob o piso."
+  3. "Eu conheço esta armadilha. Desenhei cada espinho dela."
+  4. "Aurum manteve meu trabalho, mas nunca entendeu minhas travas de segurança."
+  5. "Se eu chegar perto do mecanismo, um toque em E basta para calar esses dentes."
+
+  **Layout:**
+  - Chão contínuo em estilo masmorra.
+  - Uma faixa de espinhos ocupa parte do caminho, idealmente no centro ou pouco antes da saída.
+  - Um mecanismo/alavanca fica próximo da armadilha, em uma parede ou coluna lateral.
+  - Não há inimigos nesta tela; o foco é ensinar leitura de armadilha e interação.
+
+  **Mecânica da armadilha de espinhos:**
+  - Enquanto ativa, a armadilha causa **20 de dano** sempre que o player tocar ou atravessar os espinhos.
+  - O dano deve respeitar a mesma invencibilidade temporária usada no dano por inimigos, para evitar dezenas de danos em um único segundo.
+  - Ao chegar perto do mecanismo, aparece o prompt `[E] Desativar armadilha`.
+  - Ao pressionar `E`, a armadilha muda para estado desativado:
+    - para de causar dano;
+    - visualmente deve parecer recolhida, travada ou apagada;
+    - a tela pode ser atravessada com segurança.
+  - A borda direita pode encerrar a tela depois que o jogador cruzar a sala; a desativação não precisa ser obrigatória se o jogador aceitar o risco, mas deve ser o caminho recomendado pelo texto.
+
+- **Tela 2:** Galeria das Correntes — corredor plano com duas patrulhas
+
+  **Ideia central:**
+  - Depois de reconhecer e superar a armadilha da Tela 1, Silas atravessa uma galeria simples das catacumbas.
+  - A tela não tem plataformas elevadas, buracos, espinhos ou itens.
+  - O foco é combate direto em chão plano contra dois Saqueadores.
+  - O ambiente deve ser uma sala/corredor de masmorra cheio de grades, correntes, portas de cela e tochas, mantendo a mesma altura de plataforma da Tela 1.
+
+  **Painéis de texto — Tela 2 (galeria das correntes):**
+  1. "Dois inimigos?"
+  2. "Essa deve ser a última câmara antes da segunda chave."
+
+  **Layout:**
+  - Plataforma/chão liso e contínuo, na mesma altura da Tela 1 da Fase 2.
+  - Fundo com muitas grades, portas de cela, correntes penduradas, pedra úmida, musgo e tochas.
+  - Dois Saqueadores posicionados no caminho principal, separados por distância suficiente para o jogador lidar com um por vez se avançar com cuidado.
+  - Sem poção, sem fragmento, sem espinhos e sem mecânica extra.
+
+  **Progressão da tela:**
+  1. Jogador entra e vê os dois diálogos curtos.
+  2. Enfrenta os dois Saqueadores no corredor.
+  3. Borda direita só ativa após os dois inimigos serem derrotados.
+
+- **Tela 3:** Câmara do Segundo Fragmento — sala de guarda com pedestal
+
+  **Ideia central:**
+  - A tela fecha a Fase 2 com o segundo fragmento da Chave Mestra.
+  - O fragmento fica em um pedestal protegido por uma composição simples: posicionamento, espinhos e um Saqueador.
+  - Silas entende que o rei não apenas espalhou os fragmentos, mas também reaproveitou os mecanismos dele para esconder as partes da chave.
+
+  **Painéis de texto — Tela 3 (câmara do fragmento):**
+  1. "Lá está. O segundo fragmento."
+  2. "Aurum o trancou no lugar onde eu guardava os projetos das masmorras."
+  3. "Irônico. Ele escondeu minha chave dentro da minha própria engenharia."
+  4. "Dois fragmentos unidos já bastam para acordar os mecanismos do cofre."
+  5. "Mas ainda falta o coração da máquina."
+
+  **Layout:**
+  - Sala mais fechada, com pedestal ao fundo ou no centro.
+  - Um Saqueador guarda a câmara.
+  - Uma pequena faixa de espinhos pode proteger o acesso direto ao pedestal, preferencialmente com caminho alternativo por plataforma.
+  - O Fragmento 2 usa o mesmo padrão visual do Fragmento 1: sprite separado, oscilação vertical e brilho pulsante.
+
+  **Mecânica do Fragmento 2:**
+  - Prompt `[E] Pegar fragmento` aparece quando o jogador estiver próximo do pedestal.
+  - O fragmento só pode ser coletado após o desafio principal da tela estar resolvido, preferencialmente após derrotar o Saqueador.
+  - A fase só termina quando o Fragmento 2 for coletado.
 
 ---
 

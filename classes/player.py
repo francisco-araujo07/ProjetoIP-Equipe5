@@ -8,8 +8,34 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, estado=None):
         super().__init__()
 
-        self.image = pygame.Surface((40, 56))
-        self.rect = self.image.get_rect(topleft=(x, y))
+        self.frame_index = 0
+        self.animation_speed = settings.PLAYER_ANIMATION_SPEED
+        self.anim_idle_right = self.recortar_frames(
+            settings.SPRITESHEET_PLAYER_PARADO,
+            settings.SPRITESHEET_FRAMES,
+            settings.PLAYER_ALTURA_SPRITE,
+        )
+        self.anim_idle_left = [pygame.transform.flip(frame, True, False) for frame in self.anim_idle_right]
+        self.anim_run_right = self.recortar_frames(
+            settings.SPRITESHEET_PLAYER_CORRENDO,
+            settings.SPRITESHEET_FRAMES,
+            settings.PLAYER_ALTURA_SPRITE,
+        )
+        self.anim_run_left = [pygame.transform.flip(frame, True, False) for frame in self.anim_run_right]
+        ataque_right = self.carregar_frame(settings.SPRITE_PLAYER_ATACANDO, settings.PLAYER_ALTURA_SPRITE)
+        self.anim_attack_right = [ataque_right]
+        self.anim_attack_left = [pygame.transform.flip(ataque_right, True, False)]
+
+        self.image = self.anim_idle_right[0]
+        base_rect = pygame.Rect(x, y, settings.PLAYER_LARGURA_BASE, settings.PLAYER_ALTURA_BASE)
+        self.rect = self.image.get_rect()
+        self.rect.midbottom = base_rect.midbottom
+        self.direcao = 1
+        self.movendo = False
+        self.ultimo_ataque_ms = -settings.PLAYER_ATAQUE_COOLDOWN_MS
+        self.inicio_ataque_ms = 0
+        self._hitbox_ataque = None
+        self.inimigos_acertados = set()
 
         self.velocidade_y = 0
         self.no_chao = False
@@ -24,16 +50,45 @@ class Player(pygame.sprite.Sprite):
         if estado is not None:
             self.carregar_estado(estado)
 
-        self.atualizar_visual()
-
-        self.direcao = 1
-        self.ultimo_ataque_ms = -settings.PLAYER_ATAQUE_COOLDOWN_MS
-        self.inicio_ataque_ms = 0
-        self._hitbox_ataque = None
-        self.inimigos_acertados = set()
-
         self.invencivel = False
         self.tempo_dano = 0
+
+        self.atualizar_visual()
+
+    def recortar_frames(self, caminho, quantidade_frames, altura_desejada):
+        sheet = pygame.image.load(caminho).convert_alpha()
+        frame_width = sheet.get_width() // quantidade_frames
+        frame_height = sheet.get_height()
+        frames = []
+
+        for i in range(quantidade_frames):
+            corte = pygame.Rect(i * frame_width, 0, frame_width, frame_height)
+            frame = sheet.subsurface(corte).copy()
+            areas_visiveis = pygame.mask.from_surface(frame).get_bounding_rects()
+
+            if areas_visiveis:
+                frame = frame.subsurface(areas_visiveis[0]).copy()
+
+            escala = altura_desejada / frame.get_height()
+            tamanho = (int(frame.get_width() * escala), int(frame.get_height() * escala))
+            frame = pygame.transform.smoothscale(frame, tamanho)
+            frames.append(frame)
+
+        return frames
+
+    def carregar_frame(self, caminho, altura_desejada):
+        frame = pygame.image.load(caminho).convert_alpha()
+        areas_visiveis = pygame.mask.from_surface(frame).get_bounding_rects()
+
+        if areas_visiveis:
+            area = areas_visiveis[0].copy()
+            for rect in areas_visiveis[1:]:
+                area.union_ip(rect)
+            frame = frame.subsurface(area).copy()
+
+        escala = altura_desejada / frame.get_height()
+        tamanho = (int(frame.get_width() * escala), int(frame.get_height() * escala))
+        return pygame.transform.smoothscale(frame, tamanho)
 
     def aplicar_gravidade(self):
         self.velocidade_y += settings.GRAVIDADE
@@ -60,6 +115,8 @@ class Player(pygame.sprite.Sprite):
         self.inicio_ataque_ms = agora
         self._hitbox_ataque = self._criar_hitbox_ataque()
         self.inimigos_acertados = set()
+        self.frame_index = 0
+        self.atualizar_visual()
         return True
 
     def hitbox_ataque(self):
@@ -73,6 +130,7 @@ class Player(pygame.sprite.Sprite):
         agora = pygame.time.get_ticks()
         if agora - self.inicio_ataque_ms >= settings.PLAYER_ATAQUE_DURACAO_MS:
             self._hitbox_ataque = None
+            self.atualizar_visual()
 
     def atualizar_invencibilidade(self):
         if not self.invencivel:
@@ -100,13 +158,19 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         teclas = pygame.key.get_pressed()
+        movendo = False
 
         if teclas[pygame.K_LEFT] or teclas[pygame.K_a]:
             self.rect.x -= self.velocidade
             self.direcao = -1
+            movendo = True
         if teclas[pygame.K_RIGHT] or teclas[pygame.K_d]:
             self.rect.x += self.velocidade
             self.direcao = 1
+            movendo = True
+
+        self.movendo = movendo
+        self.atualizar_animacao()
 
         if self.rect.left < 0:
             self.rect.left = 0
@@ -130,13 +194,34 @@ class Player(pygame.sprite.Sprite):
     def esta_vivo(self):
         return self.vida > 0
 
+    def atualizar_animacao(self):
+        self.frame_index += self.animation_speed
+        frames = self._frames_atuais()
+
+        if self.frame_index >= len(frames):
+            self.frame_index = 0
+
+        self._aplicar_frame(frames[int(self.frame_index)])
+
+    def _frames_atuais(self):
+        if self._hitbox_ataque is not None:
+            return self.anim_attack_right if self.direcao > 0 else self.anim_attack_left
+        if self.movendo:
+            return self.anim_run_right if self.direcao > 0 else self.anim_run_left
+        return self.anim_idle_right if self.direcao > 0 else self.anim_idle_left
+
+    def _aplicar_frame(self, frame):
+        bottom = self.rect.bottom
+        centerx = self.rect.centerx
+        self.image = frame
+        self.rect = self.image.get_rect()
+        self.rect.bottom = bottom
+        self.rect.centerx = centerx
+
     def atualizar_visual(self):
-        caminho = (
-            settings.SPRITE_PLAYER_COM_ESPADA
-            if self.tem_espada
-            else settings.SPRITE_PLAYER_SEM_ESPADA
-        )
-        self.image = pygame.image.load(caminho).convert_alpha()
+        frames = self._frames_atuais()
+        self.frame_index %= len(frames)
+        self._aplicar_frame(frames[int(self.frame_index)])
 
     def carregar_estado(self, estado):
         self.tem_espada = estado.tem_espada
