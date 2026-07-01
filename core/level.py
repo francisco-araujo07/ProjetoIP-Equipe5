@@ -83,6 +83,8 @@ class Level:
             self.player.atacar()
         elif evento.key in (tecla_pulo, pygame.K_UP, pygame.K_w):
             self.player.pular()
+        elif evento.key == pygame.key.key_code(settings.TECLA_USAR_POCAO):
+            self.player.usar_pocao()
 
     def processar_evento_dialogo(self, evento):
         if evento.type != pygame.KEYDOWN:
@@ -224,6 +226,26 @@ class Level:
             pos_y = y + tamanho - superficie.get_height() - 1
             tela.blit(sombra, (pos_x + 1, pos_y + 1))
             tela.blit(superficie, (pos_x, pos_y))
+        largura_barra = 180
+        altura_barra = 18
+        vida_ratio = max(0, self.player.vida) / self.player.vida_max
+
+        pygame.draw.rect(tela, settings.GRAY, (20, 20, largura_barra, altura_barra))
+        pygame.draw.rect(tela, settings.RED, (20, 20, int(largura_barra * vida_ratio), altura_barra))
+
+        textos = [
+            f"Vida: {self.player.vida}/{self.player.vida_max}",
+            f"Pocoes: {self.player.pocoes}  [Q]",
+            f"Fragmentos: {self.player.fragmentos_chave}/3",
+            f"Espada: {'sim' if self.player.tem_espada else 'nao'}",
+            f"Gema: {'sim' if self.player.tem_gema else 'nao'}",
+        ]
+
+        y = 44
+        for texto in textos:
+            superficie = self.fonte_hud.render(texto, True, settings.WHITE)
+            tela.blit(superficie, (20, y))
+            y += 24
 
     def desenhar_dialogo(self, tela):
         caixa = pygame.Rect(80, settings.ALTURA_TELA - 170, settings.LARGURA_TELA - 160, 110)

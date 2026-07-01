@@ -200,9 +200,83 @@
 > Coração mecânico da fortaleza, engrenagens de latão, plataformas móveis.
 > Dificuldade: Difícil. Timing é essencial.
 
-- **Tela 1:** A definir
-- **Tela 2:** A definir
-- **Tela 3:** A definir — contém o **Fragmento 3 da Chave Mestra** 🗝️ + **Gema de Atributo**
+  **Tela 1:** Entrada da Fábrica — Introdução ao Autômato e Plataforma Móvel
+
+  **Ideia central:**
+
+  - Apresentar o ambiente industrial/vapor da fase e o novo inimigo blindado (Autômato), além do elemento de plataforma com movimentação contínua.
+  - Silas reconhece a antiga fundição de ouro automotiva que ele construiu para sustentar a opulência de Aurum.
+
+  **Painéis de texto — Tela 1 (entrada da linha de montagem):**
+
+  1. "Consigo ouvir o calor antes mesmo de vê-lo. O coração de latão do castelo."
+  2. "Tudo aqui se move em um ritmo impiedoso. Um passo em falso e as engrenagens trituram você."
+  3. "E Aurum colocou suas sentinelas de metal para patrulhar. Meus antigos protótipos."
+  4. "Os Autômatos são pesados, blindados. Minha lâmina normal vai precisar de três golpes."
+  5. "Preciso de precisão... ou de algo que amplifique minha força."
+
+  **Layout:**
+
+  - O chão inicial termina abruptamente em um poço de engrenagens giratórias (morte instantânea).
+  - Uma plataforma móvel horizontal viaja de um lado para o outro sobre o poço de engrenagens.
+  - Do outro lado, há um chão firme de metal onde um Autômato caminha lentamente em patrulha.
+
+  **Mecânica da Plataforma Móvel:**
+
+  - A plataforma se move continuamente entre o ponto X_inicial e X_final usando uma função matemática de transição ou velocidade constante.
+  - Quando o player.rect colide com o topo da plataforma, sua posição em X é somada ao deslocamento da plataforma (player.rect.x += plataforma.velocidade_x), permitindo que ele pegue carona sem escorregar.
+
+  **Mecânica do Autômato:**
+
+  - Movimento de patrulha mais lento que o Saqueador, mas possui 3 pontos de vida (exige 3 golpes para ser derrotado).
+  - A borda direita é ativada imediatamente após o jogador atravessar e derrotar o Autômato.
+
+  **Tela 2:** A Forja Alta — O Desafio da Gema de Atributo
+  **Ideia central:**
+
+  - Apresentar uma rota alternativa vertical de alto risco e alta recompensa. O jogador pode optar por ir direto para a saída enfrentando perigo, ou subir plataformas móveis complexas para coletar a Gema de Atributo.
+
+  **Painéis de texto — Tela 2 (a forja alta):**
+
+  1. "Lá em cima, nos dutos de ventilação... vejo o brilho de uma Gema de Atributo."
+  2. "Eu a usei para energizar as caldeiras. Se eu a fundir com a minha espada, o latão desses guardas vai rasgar como papel."
+  3. "O Colosso no final do caminho não terá chance se eu estiver com ela."
+  4. "O preço? Um salto cego entre as engrenagens que sobem."
+
+  **Layout:**
+
+  - Caminho de baixo: Chão de metal reto, mas guardado por dois Autômatos muito próximos, dificultando o combate sem tomar dano (já que exigem 3 golpes cada). Conduz direto à borda direita.
+  - Caminho de cima: Uma série de duas plataformas móveis verticais que sobem e descem em tempos alternados (exige timing). No topo da tela, há uma plataforma fixa com a Gema de Atributo.
+
+ **Mecânica da Gema de Atributo:**
+
+  - O item fica flutuando no topo. Ao colidir com a gema, o jogador a coleta instantaneamente.
+  - Efeito imediato: Ativa uma flag no Player (player.tem_gema = True). O dano da espada é dobrado (Autômatos agora morrem com 2 golpes em vez de 3; o Boss da Fase 4 tomará o dobro de dano).
+  - Um efeito visual simples de partículas ou brilho azul/dourado é ativado ao redor da espada do jogador.
+  **Tela 3:** O Núcleo do Motor — O Terceiro Fragmento e Chave Mestra 🗝️
+  **Ideia central:**
+  - O clímax da Fase 3. Uma câmara circular cheia de pistões industriais ao fundo. O último fragmento está no centro, protegido por um Autômato em um espaço confinado.
+
+  **Painéis de texto — Tela 3 (o núcleo do motor):**
+
+  1. "O último fragmento está preso ao pistão central."
+  2. "Três partes. Três mentiras de Aurum. Agora, todas de volta ao arquiteto."
+  3. "Sinto a Chave Mestra se moldando no meu bolso. Os dentes do cofre estão prestes a ceder."
+  4. "Basta passar por este último guarda e o rei saberá o que é o verdadeiro medo."
+
+  **Layout:**
+
+  - Uma sala fechada com estética de ouro e latão escovado.
+  - Um pedestal no centro da sala segura o Fragmento 3 da Chave Mestra (com a mesma animação de oscilação vertical e brilho math.sin(tempo) das fases anteriores).
+  - Um último Autômato guarda agressivamente o perímetro do pedestal.
+
+  **Mecânica de Conclusão da Fase:**
+  
+  - O jogador precisa derrotar o Autômato (mais fácil se tiver coletado a gema na Tela 2).
+  - Ao aproximar-se do pedestal, o prompt [E] Pegar fragmento fica disponível.
+  - Ao pressionar E: O Fragmento 3 some.
+  - Uma rápida animação de texto/HUD avisa: "Chave Mestra Concluída!"
+  - A borda direita da tela se abre, permitindo o avanço para a Fase 4.
 
 ---
 
