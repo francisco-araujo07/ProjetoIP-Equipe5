@@ -24,19 +24,30 @@ class Fase2Tela1(Level):
     def __init__(self, player_state=None):
         super().__init__(player_state)
 
+    def __init__(self, player_state=None):
+        super().__init__(player_state)
+
         self.fundo_armadilha_desativada = self._carregar_fundo(self.FUNDO_ARMADILHA_DESATIVADA)
         self.armadilha = ArmadilhaEspinhos(settings.FASE2_TELA1_ESPINHOS_RECT)
-        self.mecanismo_rect = pygame.Rect(settings.FASE2_TELA1_MECANISMO_RECT)
-        self.alavanca_image = self._carregar_alavanca()
-        self.alavanca_rect = self.alavanca_image.get_rect(midbottom=self.mecanismo_rect.midbottom)
-        self.fonte_prompt = pygame.font.Font(None, 30)
+        self.mecanismo_rect = pygame.Rect(settings.FASE2_TELA1_MECANISMO_RECT)  
 
+        imagem_normal_recortada = self._recortar_alavanca(settings.SPRITE_ALAVANCA)
+        imagem_pressionada_recortada = self._recortar_alavanca(settings.SPRITE_ALAVANCA_PRESSIONADA)
+
+        escala_alavanca = settings.ALAVANCA_ALTURA / imagem_normal_recortada.get_height()
+
+        self.alavanca_imagem_normal = self._escalar_alavanca(imagem_normal_recortada, escala_alavanca)
+        self.alavanca_imagem_pressionada = self._escalar_alavanca(imagem_pressionada_recortada, escala_alavanca)
+        self.alavanca_image = self.alavanca_imagem_normal
+        self.alavanca_rect = self.alavanca_image.get_rect(midbottom=self.mecanismo_rect.midbottom)  
+
+        self.fonte_prompt = pygame.font.Font(None, 30)
     def _carregar_fundo(self, caminho):
         fundo = pygame.image.load(caminho).convert()
         return pygame.transform.scale(fundo, (settings.LARGURA_TELA, settings.ALTURA_TELA))
 
-    def _carregar_alavanca(self):
-        imagem = pygame.image.load(settings.SPRITE_ALAVANCA).convert_alpha()
+    def _carregar_alavanca(self, caminho):
+        imagem = pygame.image.load(caminho).convert_alpha()
         areas_visiveis = pygame.mask.from_surface(imagem).get_bounding_rects()
 
         if areas_visiveis:
@@ -47,6 +58,25 @@ class Fase2Tela1(Level):
 
         escala = settings.ALAVANCA_ALTURA / imagem.get_height()
         tamanho = (int(imagem.get_width() * escala * 0.6), settings.ALAVANCA_ALTURA * 0.6)
+        return pygame.transform.smoothscale(imagem, tamanho)
+    
+    def _recortar_alavanca(self, caminho):
+        imagem = pygame.image.load(caminho).convert_alpha()
+        areas_visiveis = pygame.mask.from_surface(imagem).get_bounding_rects()
+
+        if areas_visiveis:
+            area = areas_visiveis[0].copy()
+            for rect in areas_visiveis[1:]:
+                area.union_ip(rect)
+            imagem = imagem.subsurface(area).copy()
+
+        return imagem
+
+    def _escalar_alavanca(self, imagem, escala):
+        tamanho = (
+            max(1, int(imagem.get_width() * escala * 0.6)),
+            max(1, int(imagem.get_height() * escala * 0.6)),
+        )
         return pygame.transform.smoothscale(imagem, tamanho)
 
     def processar_evento(self, evento):
@@ -62,6 +92,8 @@ class Fase2Tela1(Level):
         ):
             self.armadilha.desativar()
             self.fundo = self.fundo_armadilha_desativada
+            self.alavanca_image = self.alavanca_imagem_pressionada
+            self.alavanca_rect = self.alavanca_image.get_rect(midbottom=self.mecanismo_rect.midbottom)
             return
 
         super().processar_evento(evento)

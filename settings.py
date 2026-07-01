@@ -35,6 +35,7 @@ SPRITE_ESPADA_COLETAVEL = "assets/coletavel/espada.png"
 ESPADA_COLETAVEL_ALTURA = 150
 ESPADA_COLETAVEL_ROTACAO = -60
 SPRITE_ALAVANCA = "assets/fase2/alavanca.png"
+SPRITE_ALAVANCA_PRESSIONADA = "assets/fase2/alavanca-pressionada.png"  
 ALAVANCA_ALTURA = 96
 ICONE_HUD_CORACAO_CHEIO = "assets/hud/coracao.png"
 ICONE_HUD_CORACAO_VAZIO = "assets/hud/coracaovazio.png"
