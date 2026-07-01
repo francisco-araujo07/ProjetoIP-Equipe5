@@ -8,14 +8,12 @@ from classes.enemy import Saqueador
 from core.level import Level
 
 
-class Fase1Tela5(Level):
-    FUNDO = "assets/fase1/fase1-bg5.png"
+class Fase2Tela3(Level):
+    FUNDO = "assets/fase2/fase2-tela3.png"
+    IMAGEM_FRAGMENTO = "assets/fase1/fragmento-chave.png.png"
     DIALOGOS = [
-        "No fundo da sala, um brilho dourado pulsa lentamente.",
-        "Eu sabia que estava aqui. Projetei este esconderijo com as minhas maos.",
-        "Um fragmento da Chave Mestra. O rei a dividiu em tres partes e as espalhei pelo castelo.",
-        "Reuna os tres fragmentos... e o cofre de Aurum se abrira.",
-        "Mas primeiro - alguem esta guardando.",
+        "Dois guardas para um fragmento. Aurum esta levando meu trabalho a serio.",
+        "Nao importa. Projetei cada corredor deste castelo. Eu sei como sair daqui.",
     ]
 
     LAYOUT_PLATAFORMAS = [
@@ -26,23 +24,24 @@ class Fase1Tela5(Level):
         super().__init__(player_state)
 
         self.pedestal_rect = pygame.Rect(
-            settings.LARGURA_TELA // 2 - 45,
+            900 - 45,
             settings.ALTURA_TELA - 370,
             90,
             118,
         )
         self.fragmento = FragmentoChave(0, 0)
         self.fragmento.image = self._carregar_imagem_fragmento()
-        self.fragmento_base_center = (self.pedestal_rect.centerx, self.pedestal_rect.y + 30)
-        self.fragmento_coletado = self.player.fragmentos_chave >= 1
+        self.fragmento_base_center = (self.pedestal_rect.centerx - 130, self.pedestal_rect.y + 26)
+        self.fragmento_coletado = self.player.fragmentos_chave >= 2
         self.fonte_prompt = pygame.font.Font(None, 30)
 
         y_chao = settings.ALTURA_TELA - 152
-        saqueador = Saqueador(840, y_chao - 56, 700, settings.LARGURA_TELA - 90)
-        self.grupo_inimigos.add(saqueador)
+        s1 = Saqueador(550, y_chao - 56, 500, 850)
+        s2 = Saqueador(1000, y_chao - 56, 850, 1200)
+        self.grupo_inimigos.add(s1, s2)
 
     def _carregar_imagem_fragmento(self):
-        imagem = pygame.image.load(settings.IMAGEM_FRAGMENTO).convert_alpha()
+        imagem = pygame.image.load(self.IMAGEM_FRAGMENTO).convert_alpha()
         tamanho = (settings.FRAGMENTO_CHAVE_TAMANHO, settings.FRAGMENTO_CHAVE_TAMANHO)
         imagem = pygame.transform.smoothscale(imagem, tamanho)
         return pygame.transform.rotate(imagem, settings.FRAGMENTO_CHAVE_ROTACAO)
@@ -98,7 +97,6 @@ class Fase1Tela5(Level):
         brilho = pygame.Surface((96, 96), pygame.SRCALPHA)
         centro = (48, 48)
 
-        # Circulos concentricos dao profundidade ao brilho.
         for raio, fator_alpha in ((42, 0.25), (30, 0.45), (18, 0.75)):
             cor = (255, 210, 70, int(alpha * fator_alpha))
             pygame.draw.circle(brilho, cor, centro, raio)
