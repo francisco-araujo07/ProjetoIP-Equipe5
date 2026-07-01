@@ -34,21 +34,17 @@ class Pocao(Coletavel):
  
     def __init__(self, x, y, cura=settings.POCAO_CURA):
         self.cura = cura
-        super().__init__(x, y, largura=24, altura=32)
- 
+        super().__init__(x, y, largura=48, altura=60)
+
     def _desenhar(self):
+        imagem = pygame.image.load("assets/coletavel/pocao.png").convert_alpha()
         w, h = self.image.get_size()
-        # Frasco
-        pygame.draw.rect(self.image, (160, 40, 200), (4, 8, w - 8, h - 10), border_radius=4)
-        # Líquido (metade inferior)
-        pygame.draw.rect(self.image, (210, 30, 30), (5, h // 2, w - 10, h // 2 - 9), border_radius=3)
-        # Rolha
-        pygame.draw.rect(self.image, (110, 70, 30), (5, 2, w - 10, 8), border_radius=2)
-        # Brilho
-        pygame.draw.line(self.image, (220, 160, 255), (7, 10), (7, h - 13), 2)
- 
+        imagem = pygame.transform.smoothscale(imagem, (w, h))
+        self.image.blit(imagem, (0, 0))
+
+
     def _aplicar_efeito(self, player):
-        player.vida = min(player.vida + self.cura, player.vida_max)
+        player.pocoes += 1
  
  
 # ---------------------------------------------------------------------------
