@@ -10,6 +10,8 @@ from levels.fase1.tela3 import Fase1Tela3
 from levels.fase1.tela4 import Fase1Tela4
 from levels.fase1.tela5 import Fase1Tela5
 from levels.fase2.tela1 import Fase2Tela1
+from levels.fase2.tela2 import Fase2Tela2
+from levels.fase2.tela3 import Fase2Tela3
 
 
 class Game:
@@ -20,6 +22,8 @@ class Game:
         Fase1Tela4,
         Fase1Tela5,
         Fase2Tela1,
+        Fase2Tela2,
+        Fase2Tela3,
     ]
 
     def __init__(self):

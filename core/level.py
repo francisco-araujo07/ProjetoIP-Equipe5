@@ -59,6 +59,8 @@ class Level:
             self.player.atacar()
         elif evento.key in (tecla_pulo, pygame.K_UP, pygame.K_w):
             self.player.pular()
+        elif evento.key == pygame.key.key_code(settings.TECLA_USAR_POCAO):
+            self.player.usar_pocao()
 
     def processar_evento_dialogo(self, evento):
         if evento.type != pygame.KEYDOWN:
@@ -128,6 +130,7 @@ class Level:
 
         textos = [
             f"Vida: {self.player.vida}/{self.player.vida_max}",
+            f"Pocoes: {self.player.pocoes}  [Q]",
             f"Fragmentos: {self.player.fragmentos_chave}/3",
             f"Espada: {'sim' if self.player.tem_espada else 'nao'}",
             f"Gema: {'sim' if self.player.tem_gema else 'nao'}",

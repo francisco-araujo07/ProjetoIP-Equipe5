@@ -10,3 +10,4 @@ class PlayerState:
     tem_gema: bool = False
     vida_atual: int = settings.PLAYER_VIDA_MAX
     dano_atual: int = settings.PLAYER_DANO
+    pocoes: int = 0

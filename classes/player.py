@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.tem_gema = False
         self.vida = self.vida_max
         self.dano = settings.PLAYER_DANO
+        self.pocoes = 0
 
         if estado is not None:
             self.carregar_estado(estado)
@@ -223,12 +224,18 @@ class Player(pygame.sprite.Sprite):
         self.frame_index %= len(frames)
         self._aplicar_frame(frames[int(self.frame_index)])
 
+    def usar_pocao(self):
+        if self.pocoes > 0 and self.vida < self.vida_max:
+            self.pocoes -= 1
+            self.vida = min(self.vida + settings.POCAO_CURA, self.vida_max)
+
     def carregar_estado(self, estado):
         self.tem_espada = estado.tem_espada
         self.fragmentos_chave = estado.fragmentos_chave
         self.tem_gema = estado.tem_gema
         self.vida = min(estado.vida_atual, self.vida_max)
         self.dano = estado.dano_atual
+        self.pocoes = estado.pocoes
         self.atualizar_visual()
 
     def salvar_estado(self, estado):
@@ -237,6 +244,7 @@ class Player(pygame.sprite.Sprite):
         estado.tem_gema = self.tem_gema
         estado.vida_atual = self.vida
         estado.dano_atual = self.dano
+        estado.pocoes = self.pocoes
 
     def desenhar_efeito_gema(self, tela):
         """Desenha brilho dourado pulsante ao redor do player quando tem_gema=True."""
