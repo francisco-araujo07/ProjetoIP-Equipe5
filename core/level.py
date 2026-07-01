@@ -52,6 +52,11 @@ class Level:
         )
         self.fonte_slot = pygame.font.Font(None, 18)
 
+        self.icone_pocao = pygame.transform.scale(
+            pygame.image.load(settings.ICONE_HUD_POCAO).convert_alpha(),
+            (settings.TAM_ICONE_SLOT, settings.TAM_ICONE_SLOT),
+        )
+
         self.criar_plataformas()
 
         fundo = pygame.image.load(self.FUNDO).convert()
@@ -180,7 +185,7 @@ class Level:
  
         slots = [
             ("espada", self.player.tem_espada),
-            ("pocao",  False),   # sem asset ainda 
+            ("pocao",  self.player.pocoes > 0),
             ("gema",   self.player.tem_gema),
             ("chave",  self.player.fragmentos_chave > 0),
         ]
@@ -211,6 +216,22 @@ class Level:
                 center=(x + tamanho // 2, y + tamanho // 2)
             )
             tela.blit(self.icone_espada, icone_rect)
+        
+        elif tipo == "pocao" and self.player.pocoes > 0:
+            icone_rect = self.icone_pocao.get_rect(
+                center=(x + tamanho // 2, y + tamanho // 2)
+            )
+            tela.blit(self.icone_pocao, icone_rect)
+ 
+            # Contador de poções
+            self._desenhar_contador_slot(tela, str(self.player.pocoes), x, y, tamanho)
+ 
+            # Tecla "Q" abaixo do slot, indicando o botão de uso
+            texto_tecla = self.fonte_slot.render("Q", True, settings.WHITE)
+            tela.blit(
+                texto_tecla,
+                (x + tamanho // 2 - texto_tecla.get_width() // 2, y + tamanho + 2),
+            )
  
         elif tipo == "chave" and self.player.fragmentos_chave > 0:
             icone_rect = self.icone_chave.get_rect(
@@ -226,26 +247,15 @@ class Level:
             pos_y = y + tamanho - superficie.get_height() - 1
             tela.blit(sombra, (pos_x + 1, pos_y + 1))
             tela.blit(superficie, (pos_x, pos_y))
-        largura_barra = 180
-        altura_barra = 18
-        vida_ratio = max(0, self.player.vida) / self.player.vida_max
-
-        pygame.draw.rect(tela, settings.GRAY, (20, 20, largura_barra, altura_barra))
-        pygame.draw.rect(tela, settings.RED, (20, 20, int(largura_barra * vida_ratio), altura_barra))
-
-        textos = [
-            f"Vida: {self.player.vida}/{self.player.vida_max}",
-            f"Pocoes: {self.player.pocoes}  [Q]",
-            f"Fragmentos: {self.player.fragmentos_chave}/3",
-            f"Espada: {'sim' if self.player.tem_espada else 'nao'}",
-            f"Gema: {'sim' if self.player.tem_gema else 'nao'}",
-        ]
-
-        y = 44
-        for texto in textos:
-            superficie = self.fonte_hud.render(texto, True, settings.WHITE)
-            tela.blit(superficie, (20, y))
-            y += 24
+    def _desenhar_contador_slot(self, tela, texto, x, y, tamanho):
+        
+        #Desenha um número no canto inferior direito do slot, com sombra
+        superficie = self.fonte_slot.render(texto, True, settings.WHITE)
+        sombra = self.fonte_slot.render(texto, True, (0, 0, 0))
+        pos_x = x + tamanho - superficie.get_width() - 2
+        pos_y = y + tamanho - superficie.get_height() - 1
+        tela.blit(sombra, (pos_x + 1, pos_y + 1))
+        tela.blit(superficie, (pos_x, pos_y))
 
     def desenhar_dialogo(self, tela):
         caixa = pygame.Rect(80, settings.ALTURA_TELA - 170, settings.LARGURA_TELA - 160, 110)
