@@ -10,7 +10,6 @@ from core.level import Level
 
 class Fase1Tela5(Level):
     FUNDO = "assets/fase1/fase1-bg5.png"
-    IMAGEM_FRAGMENTO = "assets/fase1/fragmento-chave.png.png"
     DIALOGOS = [
         "No fundo da sala, um brilho dourado pulsa lentamente.",
         "Eu sabia que estava aqui. Projetei este esconderijo com as minhas maos.",
@@ -43,7 +42,7 @@ class Fase1Tela5(Level):
         self.grupo_inimigos.add(saqueador)
 
     def _carregar_imagem_fragmento(self):
-        imagem = pygame.image.load(self.IMAGEM_FRAGMENTO).convert_alpha()
+        imagem = pygame.image.load(settings.IMAGEM_FRAGMENTO).convert_alpha()
         tamanho = (settings.FRAGMENTO_CHAVE_TAMANHO, settings.FRAGMENTO_CHAVE_TAMANHO)
         imagem = pygame.transform.smoothscale(imagem, tamanho)
         return pygame.transform.rotate(imagem, settings.FRAGMENTO_CHAVE_ROTACAO)
