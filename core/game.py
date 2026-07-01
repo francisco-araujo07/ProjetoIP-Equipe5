@@ -4,6 +4,7 @@ import settings
 from core.game_state import GameState
 from core.player_state import PlayerState
 from core.result_screen import ResultScreen
+from core.menu import TelaIntroducao
 from levels.fase1.tela1 import Fase1Tela1
 from levels.fase1.tela2 import Fase1Tela2
 from levels.fase1.tela3 import Fase1Tela3
@@ -35,7 +36,8 @@ class Game:
         self.clock = pygame.time.Clock()
         self.rodando = True
 
-        self.estado = GameState.PLAYING
+        self.estado = GameState.MENU
+        self.menu = TelaIntroducao(self.tela)
         self.tela_resultado = None
         self.nivel_atual = 0
         self.player_state = PlayerState()
@@ -65,6 +67,8 @@ class Game:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 self.rodando = False
+            elif self.estado == GameState.MENU:
+                self.menu.processar_evento(evento)
             elif self.estado in (GameState.GAME_OVER, GameState.WIN):
                 self.tela_resultado.processar_evento(evento)
             else:
@@ -74,6 +78,13 @@ class Game:
                         pygame.display.toggle_fullscreen()
 
     def atualizar(self):
+        if self.estado == GameState.MENU:
+            if self.menu.iniciar_solicitado:
+                self.estado = GameState.PLAYING
+            elif self.menu.sair_solicitado:
+                self.rodando = False
+            return
+
         if self.estado in (GameState.GAME_OVER, GameState.WIN):
             if self.tela_resultado.reiniciar_solicitado:
                 self._reiniciar()
@@ -90,7 +101,9 @@ class Game:
             self._avancar_nivel()
 
     def desenhar(self):
-        if self.estado in (GameState.GAME_OVER, GameState.WIN):
+        if self.estado == GameState.MENU:
+            self.menu.desenhar(self.tela)
+        elif self.estado in (GameState.GAME_OVER, GameState.WIN):
             self.tela_resultado.desenhar(self.tela)
         else:
             self.nivel.desenhar(self.tela)
