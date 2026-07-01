@@ -27,14 +27,28 @@ class Level:
         self.dialogo_ativo = len(self.DIALOGOS) > 0
         self.fonte_dialogo = pygame.font.Font(None, 32)
         self.fonte_hud = pygame.font.Font(None, 28)
-        TAM_ICONE = 26
-        self.icone_espada = pygame.transform.scale(
-            pygame.image.load(settings.SPRITE_ESPADA_COLETAVEL).convert_alpha(),
-            (TAM_ICONE, TAM_ICONE),
+        
+        self.icone_coracao_cheio = pygame.transform.scale(
+        pygame.image.load(settings.ICONE_HUD_CORACAO_CHEIO).convert_alpha(),
+       (settings.TAM_ICONE_CORACAO, settings.TAM_ICONE_CORACAO),
+       )
+        self.icone_coracao_vazio = pygame.transform.scale(
+       pygame.image.load(settings.ICONE_HUD_CORACAO_VAZIO).convert_alpha(),
+       (settings.TAM_ICONE_CORACAO, settings.TAM_ICONE_CORACAO),
         )
-        self.icone_chave = pygame.transform.scale(
-            pygame.image.load(settings.IMAGEM_FRAGMENTO).convert_alpha(),
-            (TAM_ICONE, TAM_ICONE),
+        self.icone_espada = pygame.transform.rotate(
+       pygame.transform.scale(
+               pygame.image.load(settings.SPRITE_ESPADA_COLETAVEL).convert_alpha(),
+               (settings.TAM_ICONE_SLOT, settings.TAM_ICONE_SLOT),
+           ),
+           settings.ROTACAO_ICONE_SLOT,
+        )
+        self.icone_chave = pygame.transform.rotate(
+           pygame.transform.scale(
+               pygame.image.load(settings.IMAGEM_FRAGMENTO).convert_alpha(),
+               (settings.TAM_ICONE_SLOT, settings.TAM_ICONE_SLOT),
+           ),
+           settings.ROTACAO_ICONE_SLOT,
         )
         self.fonte_slot = pygame.font.Font(None, 18)
 
@@ -132,98 +146,39 @@ class Level:
     def desenhar_hud(self, tela):
         self._desenhar_coracoes(tela)
         self._desenhar_slots(tela)
- 
-    # -----------------------------------------------------------------------
+
  
     def _desenhar_coracoes(self, tela):
-        """Linha de corações pixel-art no canto superior esquerdo."""
-        TOTAL_CORACOES  = 10
-        TAMANHO         = 18          # px de cada coração
-        ESPACO          = 2           # px entre corações
-        X_INICIO        = 20
-        Y_INICIO        = 20
+        # Linha de corações no canto superior esquerdo. Um coração representa cada 10 pontos de vida.
+        TAMANHO   = settings.TAM_ICONE_CORACAO
+        ESPACO    = settings.ESPACO_CORACAO_HUD
+        X_INICIO  = settings.X_INICIO_HUD
+        Y_INICIO  = settings.Y_INICIO_CORACOES_HUD
  
-        vida_ratio      = max(0, self.player.vida) / self.player.vida_max
-        cheios          = round(vida_ratio * TOTAL_CORACOES)
+        total_coracoes = max(1, round(self.player.vida_max / 10))
+        cheios = round((max(0, self.player.vida) / self.player.vida_max) * total_coracoes)
  
-        for i in range(TOTAL_CORACOES):
+        for i in range(total_coracoes):
             x = X_INICIO + i * (TAMANHO + ESPACO)
-            preenchido = i < cheios
-            self._desenhar_coracao(tela, x, Y_INICIO, TAMANHO, preenchido)
+            icone = self.icone_coracao_cheio if i < cheios else self.icone_coracao_vazio
+            tela.blit(icone, (x, Y_INICIO))
  
         # Número de vida ao lado
         texto = self.fonte_hud.render(
             f"{self.player.vida}/{self.player.vida_max}", True, settings.WHITE
         )
-        tela.blit(texto, (X_INICIO + TOTAL_CORACOES * (TAMANHO + ESPACO) + 6, Y_INICIO + 2))
- 
-    def _desenhar_coracao(self, tela, x, y, tamanho, preenchido):
-        """Desenha um coração pixel-art num retângulo de 'tamanho x tamanho'."""
-        cor_cheia   = (232, 54,  54)
-        cor_brilho  = (255, 107, 107)
-        cor_sombra  = (192, 32,  32)
-        cor_vazia   = (80,  80,  80)
-        cor_contorno = (0,   0,   0)
- 
-        # Grade 9×8 (colunas × linhas) mapeada para o tamanho real
-        grade = [
-            "0110 1100",   # linha 0
-            "1111 1111",   # linha 1  (brilho nas cols 1-2 e 5-6)
-            "1111 1111",   # linha 2
-            "1111 1111",   # linha 3
-            "0111 1110",   # linha 4
-            "0011 1100",   # linha 5
-            "0001 1000",   # linha 6
-            "0000 0000",   # linha 7  (ponta — 1 pixel)
-        ]
-        # Mapa pixel correto (sem espaço, usando string contínua)
-        pixels = [
-            "011011000",
-            "111111110",
-            "111111110",
-            "111111110",
-            "011111100",
-            "001111000",
-            "000110000",
-            "000010000",
-        ]
- 
-        linhas = len(pixels)
-        colunas = len(pixels[0])
-        pw = tamanho / colunas   # largura de 1 pixel lógico
-        ph = tamanho / linhas
- 
-        for row, linha in enumerate(pixels):
-            for col, bit in enumerate(linha):
-                if bit == "0":
-                    continue
-                rx = int(x + col * pw)
-                ry = int(y + row * ph)
-                rw = max(1, int(pw))
-                rh = max(1, int(ph))
- 
-                if preenchido:
-                    if row == 1 and col in (1, 2, 5, 6):
-                        cor = cor_brilho
-                    elif row >= 5:
-                        cor = cor_sombra
-                    else:
-                        cor = cor_cheia
-                else:
-                    cor = cor_vazia
- 
-                pygame.draw.rect(tela, cor, (rx, ry, rw, rh))
+        tela.blit(texto, (X_INICIO + total_coracoes * (TAMANHO + ESPACO) + 6, Y_INICIO + 2))
  
     def _desenhar_slots(self, tela):
-        """4 slots de inventário: espada, poção, gema, chave (sem rótulo)."""
-        SLOT_TAM = 36
-        SLOT_GAP = 4
-        X_INICIO = 20
-        Y_INICIO = 46
+        #slots do inventário: espada, poção, gema, chave.
+        SLOT_TAM = settings.TAM_SLOT_HUD
+        SLOT_GAP = settings.ESPACO_SLOT_HUD
+        X_INICIO = settings.X_INICIO_HUD
+        Y_INICIO = settings.Y_INICIO_SLOTS_HUD
  
         slots = [
             ("espada", self.player.tem_espada),
-            ("pocao",  False),   # sem asset ainda — fica sempre vazio
+            ("pocao",  False),   # sem asset ainda 
             ("gema",   self.player.tem_gema),
             ("chave",  self.player.fragmentos_chave > 0),
         ]
@@ -235,7 +190,7 @@ class Level:
             self._desenhar_icone_slot(tela, tipo, x, y, SLOT_TAM)
  
     def _desenhar_slot_base(self, tela, x, y, tamanho, ativo):
-        """Fundo + borda estilo Minecraft de um slot."""
+        # Fundo + borda de um slot.
         cor_fundo = (70, 70, 70) if ativo else (40, 40, 40)
         cor_clara = (140, 140, 140) if ativo else (90, 90, 90)
         cor_escura = (20, 20, 20)
@@ -247,7 +202,7 @@ class Level:
         pygame.draw.line(tela, cor_escura, (x + tamanho - 1, y), (x + tamanho - 1, y + tamanho), 2)
  
     def _desenhar_icone_slot(self, tela, tipo, x, y, tamanho):
-        """Desenha o conteúdo do slot: PNG (espada/chave) ou nada (poção/gema)."""
+        # Desenha o conteúdo do slot.
  
         if tipo == "espada" and self.player.tem_espada:
             icone_rect = self.icone_espada.get_rect(
@@ -280,8 +235,8 @@ class Level:
         superficie = self.fonte_dialogo.render(texto_visivel, True, settings.WHITE)
         tela.blit(superficie, (caixa.x + 24, caixa.y + 28))
     
-    def checar_colisao_coletaveis(self):                     # ← ADICIONADO
-        """Detecta colisão entre o player e coletáveis"""
+    def checar_colisao_coletaveis(self):
+        # Detecta colisão entre o player e coletáveis
         coletados = pygame.sprite.spritecollide(
             self.player,
             self.coletaveis,
