@@ -102,6 +102,3 @@ class Fase2Tela3(Level):
             pygame.draw.circle(brilho, cor, centro, raio)
 
         tela.blit(brilho, (centro_x - 48, centro_y - 48))
-
-    def terminou(self):
-        return super().terminou() and self.fragmento_coletado
