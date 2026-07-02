@@ -8,12 +8,25 @@ class Plataforma(pygame.sprite.Sprite):
         super().__init__()
 
         if caminho_imagem:
-            self.image = pygame.image.load(caminho_imagem).convert_alpha()
-            self.image = pygame.transform.scale(self.image, (largura, altura))  # Redimensiona para o tamanho da plataforma
+            self.image = self._carregar_imagem(caminho_imagem, largura, altura)
         else:
             self.image = pygame.Surface((largura, altura), pygame.SRCALPHA)  # Superfície transparente
 
         self.rect = self.image.get_rect(topleft=(x, y))
+
+    def _carregar_imagem(self, caminho_imagem, largura, altura):
+        # Recorta a margem transparente ao redor do desenho antes de redimensionar,
+        # senao a arte fica encolhida num canto do rect (mesmo padrao usado em Player/ArmadilhaEspinhos).
+        imagem = pygame.image.load(caminho_imagem).convert_alpha()
+        areas_visiveis = pygame.mask.from_surface(imagem).get_bounding_rects()
+
+        if areas_visiveis:
+            area = areas_visiveis[0].copy()
+            for rect in areas_visiveis[1:]:
+                area.union_ip(rect)
+            imagem = imagem.subsurface(area).copy()
+
+        return pygame.transform.scale(imagem, (largura, altura))
 
 def resolver_colisao_x(player, grupo_plataformas):
     colisoes = pygame.sprite.spritecollide(player, grupo_plataformas, False)
@@ -45,12 +58,9 @@ class PlataformaMovel(Plataforma):
         self.velocidade_x = velocidade if eixo == "x" else 0
         self.velocidade_y = velocidade if eixo == "y" else 0
 
-        if eixo == "x":
-            self.pos_inicial = x
-            self.pos_final = destino
-        else:
-            self.pos_inicial = y
-            self.pos_final = destino
+        pos_inicial = x if eixo == "x" else y
+        self.pos_min = min(pos_inicial, destino)
+        self.pos_max = max(pos_inicial, destino)
 
     def update(self, *args):
         if self.eixo == "x":
@@ -60,15 +70,17 @@ class PlataformaMovel(Plataforma):
             self.rect.y += self.velocidade_y
             pos_atual = self.rect.y
 
-        if self.velocidade_x > 0 and pos_atual >= self.pos_final:
-            self.rect.x = self.pos_final
-            self.velocidade_x *= -1
-        elif self.velocidade_x < 0 and pos_atual <= self.pos_inicial:
-            self.rect.x = self.pos_inicial
-            self.velocidade_x *= -1
-        elif self.velocidade_y > 0 and pos_atual >= self.pos_final:
-            self.rect.y = self.pos_final
-            self.velocidade_y *= -1
-        elif self.velocidade_y < 0 and pos_atual <= self.pos_inicial:
-            self.rect.y = self.pos_inicial
-            self.velocidade_y *= -1
+        if pos_atual >= self.pos_max:
+            if self.eixo == "x":
+                self.rect.x = self.pos_max
+                self.velocidade_x = -abs(self.velocidade_x)
+            else:
+                self.rect.y = self.pos_max
+                self.velocidade_y = -abs(self.velocidade_y)
+        elif pos_atual <= self.pos_min:
+            if self.eixo == "x":
+                self.rect.x = self.pos_min
+                self.velocidade_x = abs(self.velocidade_x)
+            else:
+                self.rect.y = self.pos_min
+                self.velocidade_y = abs(self.velocidade_y)

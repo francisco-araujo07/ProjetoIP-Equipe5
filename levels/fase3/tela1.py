@@ -1,6 +1,5 @@
 import settings
 from classes.enemy import Automato
-from classes.plataforma import PlataformaMovel
 from core.game_state import GameState
 from core.level import Level
 
@@ -24,15 +23,11 @@ class Fase3Tela1(Level):
     ]
 
     LAYOUT_PLATAFORMAS_MOVEIS = [
-        (390, settings.ALTURA_TELA - 172, 110, 20, 630, 3, "x"),
+        (390, settings.ALTURA_TELA - 172, 110, 40, 630, 2, "x", settings.IMAGEM_PLATAFORMA_COMUM),
     ]
 
     def __init__(self, player_state=None):
         super().__init__(player_state)
-
-        for plataforma in self.plataformas:
-            if isinstance(plataforma, PlataformaMovel):
-                plataforma.image.fill(settings.GRAY)
 
         y_chao = settings.ALTURA_TELA - 90
         automato = Automato(950, y_chao - 64, 780, settings.LARGURA_TELA - 60)

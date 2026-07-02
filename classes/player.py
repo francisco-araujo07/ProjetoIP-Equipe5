@@ -188,9 +188,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocidade_y
         resolver_colisao_y(self, grupo_plataformas)
 
-        if isinstance(self.plataforma_atual, PlataformaMovel): 
+        if isinstance(self.plataforma_atual, PlataformaMovel):
             self.rect.x += self.plataforma_atual.velocidade_x
-            self.rect.y += self.plataforma_atual.velocidade_y
         
         self.atualizar_ataque()
         self.atualizar_invencibilidade()
