@@ -204,6 +204,9 @@ class Player(pygame.sprite.Sprite):
 
             self.invencivel = True
             self.tempo_dano = pygame.time.get_ticks()
+    
+    def morrer_queda(self):
+        self.vida = 0
 
     def esta_vivo(self):
         return self.vida > 0

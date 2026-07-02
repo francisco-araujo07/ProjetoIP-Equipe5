@@ -129,6 +129,7 @@ class Level:
         self.checar_colisao_coletaveis()
         self.leitura_ataque()
         self.leitura_dano()
+        self.checar_queda()
         self.salvar_estado_jogador()
 
     def atualizar_dialogo(self):
@@ -315,6 +316,14 @@ class Level:
             self.player.levar_dano(inimigo.dano)
 
         if not self.player.esta_vivo():
+            self.estado = GameState.GAME_OVER
+    
+    def checar_queda(self):
+        if self.estado != GameState.PLAYING:
+            return
+        
+        if self.player.rect.top > settings.ALTURA_TELA:
+            self.player.morrer_queda()
             self.estado = GameState.GAME_OVER
 
     def salvar_estado_jogador(self):
