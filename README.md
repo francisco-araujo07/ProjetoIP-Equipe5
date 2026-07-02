@@ -1,197 +1,181 @@
-<br />
-<p align="center">
-  <!-- Substitua pela logo/imagem do projeto -->
-  <h2 align="center"> Phyntom </h2>
-  <h3 align="center">Projeto de jogo com Python e Programação Orientada a Objetos (POO)</h3>
+<div align="center">
 
-  <p align="center">
-    CIn UFPE | Junho 2026 | Introdução à Programação (IP)
-    <br />
-    <a href="[https://github.com/francisco-araujo07/ProjetoIP-Pygame]"><strong>Explorar o repositório »</strong></a>
-    <br />
-  </p>
+<img src="assets/screenshots/tela_inicial.png" alt="Gilded Shadows" width="600"/>
+
+# ⚔️ Gilded Shadows
+
+<p>
+  <img src="https://img.shields.io/badge/Python-3.13+-blue?logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/pygame--ce-2.5+-green?logo=pygame&logoColor=white" alt="pygame-ce"/>
+  <img src="https://img.shields.io/badge/status-conclu%C3%ADdo-success" alt="status"/>
 </p>
 
----
+Jogo 2D desenvolvido em Python + pygame-ce, projeto da disciplina de Introdução à Programação.
 
-## Sumário
-
-1. [Colaboradores](#colaboradores)
-2. [Divisão do Time](#divisão-do-time)
-3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
-4. [Estrutura de Arquivos](#estrutura-de-arquivos)
-5. [Instalação](#instalação)
-6. [Como Executar](#como-executar)
-7. [Sobre o Processo](#sobre-o-processo)
-8. [Conceitos de Programação Aplicados](#conceitos-de-programação-aplicados)
-9. [Galeria do Jogo](#galeria-do-jogo)
-10. [Contato](#contato)
+</div>
 
 ---
 
-## Colaboradores
+## 👥 Equipe
 
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/francisco-araujo07"><img src="https://avatars.githubusercontent.com/u/195521025?v=4" width="100px;" alt=""/><br /><sub><b>[Francisco Estevão]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/pedroaugustobpaz-tech"><img src="https://avatars.githubusercontent.com/u/276592914?v=4" width="100px;" alt=""/><br /><sub><b>[Pedro Augusto]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/fgbg-cin"><img src="https://avatars.githubusercontent.com/u/290041884?v=4" width="100px;" alt=""/><br /><sub><b>[Francisco Gabriel]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/MatheusAgra"><img src="https://avatars.githubusercontent.com/u/163215063?v=4" width="100px;" alt=""/><br /><sub><b>[Matheus Agra]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/Jrmlcin"><img src="https://avatars.githubusercontent.com/u/267380926?v=4" width="100px;" alt=""/><br /><sub><b>[João Ricardo]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/agtm-tech"><img src="https://avatars.githubusercontent.com/u/266768504?v=4" width="100px;" alt=""/><br /><sub><b>[Alam Menezes]</b></sub></a></td>
-  </tr>
+<tr><th>Membro</th><th>Responsabilidade</th></tr>
+<tr><td><b>Francisco Estevão</b></td><td>Logística do <code>game.py</code> e estrutura dos levels</td></tr>
+<tr><td><b>Francisco Gabriel</b></td><td>Sprites, funções iniciais/finais e suas telas</td></tr>
+<tr><td><b>Pedro Augusto</b></td><td>Lore e mecânica dos coletáveis</td></tr>
+<tr><td><b>Matheus Agra</b></td><td>Divisão de tasks; mecânica do player e inimigos</td></tr>
+<tr><td><b>João Ricardo</b></td><td>Mecânicas de coletáveis e lógica interna das fases</td></tr>
+<tr><td><b>Alam Menezes</b></td><td>Colisão e plataformas fixas/móveis</td></tr>
 </table>
 
 ---
 
-## Divisão do Time
+# Gilded Shadows
 
-<table>
-  <tr>
-    <td align="left">
-      <li><b>Francisco Estevão:</b> [Descreva as responsabilidades]</li>
-      <li><b>Pedro Augusto:</b> [Descreva as responsabilidades]</li>
-      <li><b>Francisco Gabriel:</b> [Descreva as responsabilidades]</li>
-      <li><b>Matheus Agra:</b> [Descreva as responsabilidades]</li>
-      <li><b>João Ricardo:</b> [Descreva as responsabilidades]</li>
-      <li><b>Alam Menezes:</b> [Descreva as responsabilidades]</li>
-    </td>
-  </tr>
-</table>
+Platformer de ação 2D single-player em **Python + Pygame**. Projeto da disciplina de **Introdução à Programação (IP)** — Centro de Informática (CIn/UFPE), Equipe 5.
+
+## Enredo
+
+Você é **Silas**, arquiteto do castelo do Rei Aurum, preso sete anos por "saber demais". Ele retorna às masmorras que projetou para reunir os três fragmentos da **Chave Mestra**, abrir o **Cofre de Aurum** e enfrentar o guardião final. No caminho: guardas, armadilhas e um boss mecânico.
+
+## Objetivo do projeto
+
+Construir um platformer completo aplicando POO, modularização, game loop, máquina de estados e física de colisão — do menu à tela de vitória, com progressão encadeada por fases e persistência do estado do jogador entre telas.
 
 ---
 
-## Tecnologias Utilizadas
+## Como rodar
 
-- [Python 3.13.1](https://www.python.org/)
-- [Pygame 2.6.1](https://www.pygame.org/wiki/GettingStarted)
-- [OS](https://python.readthedocs.io/en/stable/library/os.html)
+**Pré-requisitos:** Python 3.
 
-### Por que Pygame?
+```bash
+# 1. ambiente virtual
+python -m venv venv
 
-- Ampla documentação e repositórios de aprendizado disponíveis online.
-- Facilidade para criação de superfícies e posicionamento de sprites com `rect`.
-- Funções nativas de colisão entre objetos.
-- Gerenciamento simples de eventos do jogo.
+# 2. ativar (Windows / PowerShell)
+.\venv\Scripts\Activate.ps1
+#   erro de permissão? rode antes:
+#   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 
-### Por que OS?
-
-- Utilizado exclusivamente para manipulação de caminhos de arquivos de imagem e áudio via `os.path`.
-
----
-
-## Estrutura de Arquivos
-
-```
-/assets
-    Imagens separadas por categoria
-
-/classes
-    Classes e lógica dos elementos do jogo (POO)
-
-/constants
-    Constantes globais usadas no fluxo do jogo
-
-/levels
-    Dados dos mapas de cada fase
-
-/sound
-    Músicas e efeitos sonoros
-
-/Gameplay.py
-    Lógica principal do fluxo do jogo
-
-/Game.py
-    Arquivo principal (entry point)
-```
-
----
-
-## Instalação
-
-1. Clone o repositório
-
-```sh
-git clone [LINK DO REPOSITÓRIO]
-```
-
-2. Instale as dependências
-
-```sh
+# 3. dependências
 pip install -r requirements.txt
+
+# 4. executar
+python main.py
 ```
 
-> Use `pip3` se o sistema tiver múltiplas versões de Python instaladas.
+---
+
+## Controles
+
+**Jogo**
+- Mover: `A`/`←` e `D`/`→`
+- Pular: `SPACE`, `W` ou `↑`
+- Atacar: `Z` ou clique esquerdo
+- Usar poção: `Q`
+- Interagir (pedestal/mecanismo): `E`
+
+**Sistema**
+- `ESC` — pausar
+- `F11` — tela cheia
+- Nas telas de fim de jogo: `R` reinicia · `ESC`/`Q` sai
 
 ---
 
-## Como Executar
+## Mecânicas
 
-1. No terminal, navegue até a pasta raiz do projeto
-2. Execute:
+**Combate**
+- Melee com hitbox direcional, cooldown de 400ms e golpe de 220ms
+- Cada inimigo recebe dano uma única vez por golpe
+- Vida com corações no HUD; i-frames com efeito de piscar após dano
+- Poções de cura no inventário
 
-```sh
-python Game.py
+**Inimigos**
+- **Saqueador** — patrulha rápida, pouca vida
+- **Autômato** — tanque lento, muita vida
+- **Colosso (boss)** — máquina de estados `Perseguindo → Telegrafando → Atacando → Vulnerável`; só recebe dano na janela de vulnerabilidade; barra de vida própria e morte com fade-out
+
+**Plataforma e física**
+- Colisão resolvida em X e Y separadamente
+- Distinção entre contato lateral e topo/base por sobreposição
+- Plataformas móveis (eixo X ou Y) que arrastam o jogador
+- Gravidade com teto de queda; morte ao cair fora do mapa
+
+**Coletáveis**
+- **Poção** — guardada e usada com `Q`
+- **Fragmento de Chave** — reunir 3 para progredir
+- **Gema** — dobra o dano e adiciona brilho ao personagem
+- Efeitos persistem entre telas; guarda contra aplicação dupla ao recarregar
+
+**Outros sistemas**
+- Armadilha de espinhos desativável por mecanismo (`E`), com troca de sprite/fundo
+- Diálogos com efeito máquina de escrever (~30 letras/s), congelando o jogo
+- HUD com corações e slots de inventário
+- Menu inicial, pausa, game over e vitória
+
+---
+
+## Estrutura
+
+```
+ProjetoIP-Equipe5/
+├── main.py               # ponto de entrada
+├── settings.py           # constantes globais
+├── requirements.txt
+│
+├── core/                 # motor e fluxo
+│   ├── game.py           # loop principal + máquina de estados
+│   ├── game_state.py     # enum de estados
+│   ├── player_state.py   # dataclass de persistência entre fases
+│   ├── level.py          # classe base Level (motor de fase)
+│   ├── menu.py           # tela inicial
+│   ├── pause_screen.py   # tela de pausa
+│   └── result_screen.py  # game over / vitória
+│
+├── classes/              # entidades do mundo
+│   ├── player.py         # física, animação, ataque
+│   ├── enemy.py          # inimigos e boss
+│   ├── plataforma.py     # plataformas + funções de colisão
+│   ├── coletavel.py      # itens e efeitos
+│   └── armadilha.py      # espinhos
+│
+├── levels/               # 12 telas encadeadas
+│   ├── fase1/            # telas 1–5
+│   ├── fase2/            # telas 1–3
+│   ├── fase3/            # telas 1–3
+│   └── fase4/            # tela 1 (boss)
+│
+└── assets/               # sprites, fundos e UI
+    ├── player/  inimigos/  coletavel/  comum/
+    ├── hud/  menu/  game_over/  vitoria/
+    └── fase1/ … fase4/
 ```
 
-> Use `python3 Game.py` se necessário.
+**Progressão:** Menu → Fase 1 (5 telas) → Fase 2 (3) → Fase 3 (3) → Fase 4 (boss) → Vitória → reiniciar ou sair.
 
 ---
 
-## Sobre o Processo
+## Tecnologias
 
-| Desafio principal | Como lidamos |
-|---|---|
-| [Ex.: Controle de versão com Git] | [Ex.: Sessões de alinhamento em equipe] |
-| [Ex.: Distribuição de tarefas] | [Ex.: Comunicação assíncrona via Discord/WhatsApp] |
-
-| Erros cometidos | Como corrigimos |
-|---|---|
-| [Ex.: Falta de reuniões frequentes] | [Ex.: Comunicação ativa e divisão clara de atividades] |
-
-**Lições aprendidas:**
-- Trabalho assíncrono
-- Importância do trabalho em equipe e comunicação ativa
-- Compartilhamento de conhecimento
-- Controle de versão com Git e GitHub
-- Recursos do Python e Pygame
-- Programação Orientada a Objetos (POO)
+- **Python 3**
+- **Pygame** — engine
+- **Visual Studio Code**
 
 ---
 
-## Conceitos de Programação Aplicados
+## Conceitos aplicados
 
-- **POO:** Classes, herança, encapsulamento, polimorfismo
-- **Operadores lógicos e relacionais / Comandos condicionais**
-- **Laços de repetição (loops)**
-- **Listas**
-- **Funções**
-
-> Confira a documentação detalhada em: [Link do documento de conceitos]
+POO (herança, polimorfismo) · Template Method (base `Level` e coletáveis) · modularização e separação de responsabilidades · game loop · máquina de estados · colisão em dois eixos · manipulação de spritesheets · eventos em tempo real · física de plataforma · clean code.
 
 ---
 
-## Galeria do Jogo
+## Roadmap
 
-> *Adicione screenshots aqui após o desenvolvimento*
-
----
-
-## Contribuindo
-
-1. Fork o projeto
-2. Crie sua branch (`git checkout -b feature/nomeDaFeature`)
-3. Commit suas mudanças (`git commit -m 'Add nomeDaFeature'`)
-4. Push para a branch (`git push origin feature/nomeDaFeature`)
-5. Abra um Pull Request
+Efeitos sonoros e trilha · mais inimigos · animação de ataque multi-frame · checkpoints · balanceamento de dano/vida · novos itens.
 
 ---
 
-## Contato
 
-- Francisco Estevão — fela@cin.ufpe.br
-- Pedro Augusto     —  pabpa@cin.ufpe.br
-- Francisco Gabriel — fgbg@cin.ufpe.br
-- Matheus Agra      — mesa2@cin.ufpe.br
-- João Ricardo      — jrml@cin.ufpe.br
-- Alam Menezes      — agtm@cin.ufpe.br
+## Licença
+
+Projeto acadêmico, para fins educacionais.
