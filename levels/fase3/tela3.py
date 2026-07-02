@@ -3,7 +3,7 @@ import math
 import pygame
 
 import settings
-from classes.coletavel import FragmentoChave
+from classes.coletavel import FragmentoChave, Pocao
 from classes.enemy import Automato
 from core.level import Level
 
@@ -55,6 +55,8 @@ class Fase3Tela3(Level):
             self.pedestal_rect.right + 150,
         )
         self.grupo_inimigos.add(automato)
+        pocao = Pocao(300, y_chao - 32)
+        self.coletaveis.add(pocao)
 
     def _carregar_fundo(self, caminho):
         fundo = pygame.image.load(caminho).convert()
