@@ -24,7 +24,7 @@ class ResultScreen:
         self.fonte_titulo = pygame.font.Font(None, settings.FONTE_TITULO_RESULTADO)
         self.fonte_texto = pygame.font.Font(None, settings.FONTE_TEXTO_RESULTADO)
         
-        # Carrega a arte customizada apenas se o jogador perder
+        # 1. Carrega a arte customizada se o jogador perder
         if self.estado == GameState.GAME_OVER:
             self.background = pygame.image.load("assets/game_over/game_over.png").convert()
             self.background = pygame.transform.scale(self.background, (settings.LARGURA_TELA, settings.ALTURA_TELA))
@@ -33,6 +33,11 @@ class ResultScreen:
             self.rect_reiniciar = pygame.Rect(440, 495, 400, 85)  # "TENTAR NOVAMENTE"
             self.rect_sair = pygame.Rect(440, 605, 400, 80)       # "RETORNAR AO MENU"
             self.cor_seletor = (212, 175, 55)                     # Dourado para o hover
+
+        # 2. Carrega a belíssima arte customizada com texto embutido se o jogador vencer
+        elif self.estado == GameState.WIN:
+            self.background = pygame.image.load("assets/vitoria/game_wins.png").convert()
+            self.background = pygame.transform.scale(self.background, (settings.LARGURA_TELA, settings.ALTURA_TELA))
 
     def processar_evento(self, evento):
         # 1. Processamento por clique de mouse (Apenas no Game Over)
@@ -74,8 +79,25 @@ class ResultScreen:
             elif self.rect_sair.collidepoint(posicao_mouse):
                 pygame.draw.polygon(tela, self.cor_seletor, [(400, 630), (400, 650), (420, 640)])
                 pygame.draw.polygon(tela, self.cor_seletor, [(880, 630), (880, 650), (860, 640)])
+                
+        elif self.estado == GameState.WIN:
+            # Desenha o plano de fundo triunfante completo (com o Parabéns! pixelado nativo)
+            tela.blit(self.background, (0, 0))
+            
+            # Renderiza as instruções de controle para guiar o usuário na base da tela
+            texto_opcoes = f"[{settings.TECLA_REINICIAR_JOGO.upper()}] Jogar Novamente   [Esc/Q] Sair"
+            opcoes = self.fonte_texto.render(texto_opcoes, True, settings.WHITE)
+            opcoes_sombra = self.fonte_texto.render(texto_opcoes, True, settings.BLACK)
+            
+            centro_x = settings.LARGURA_TELA // 2
+            pos_y = settings.ALTURA_TELA - 50  # Posicionado sutilmente acima da margem inferior
+            
+            # Carimba a sombra deslocada e o texto por cima para destacar das moedas de ouro
+            tela.blit(opcoes_sombra, opcoes_sombra.get_rect(center=(centro_x + 2, pos_y + 2)))
+            tela.blit(opcoes, opcoes.get_rect(center=(centro_x, pos_y)))
+            
         else:
-            # Mantém o comportamento em texto original para o estado de Vitória (WIN)
+            # Mantém o comportamento em texto original para qualquer outro estado genérico
             tela.fill(settings.BLACK)
 
             textos = self.TEXTOS[self.estado]
