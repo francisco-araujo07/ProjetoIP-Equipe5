@@ -150,7 +150,4 @@ class Fase3Tela3(Level):
         tela.blit(texto, texto.get_rect(center=(centro_x, centro_y)))
 
     def terminou(self):
-        # TODO: reativar quando a Fase 4 existir. Por enquanto a Fase 3 e o fim do conteudo
-        # implementado — a porta abre e o fragmento e coletado normalmente, mas a borda
-        # direita nao avanca pra lugar nenhum (evita cair na tela de Vitoria antes da hora).
-        return False
+        return super().terminou() and self.fragmento_coletado
