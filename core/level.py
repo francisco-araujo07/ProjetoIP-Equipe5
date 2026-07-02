@@ -158,10 +158,22 @@ class Level:
         if not self.player.invencivel or (pygame.time.get_ticks() // 120) % 2 == 0:
             tela.blit(self.player.image, self.player.rect)
 
+        # Gancho para telas filhas desenharem elementos extra do mundo
+        # (armadilhas, alavancas, prompts etc.) SEMPRE por baixo do HUD
+        # e do diálogo, independente da ordem em que a tela filha chama
+        # os métodos de desenho.
+        self.desenhar_mundo_extra(tela)
+
         self.desenhar_hud(tela)
 
         if self.dialogo_ativo:
             self.desenhar_dialogo(tela)
+
+    def desenhar_mundo_extra(self, tela):
+        """Sobrescreva em subclasses para desenhar elementos extra do mundo
+        (armadilhas, alavancas, prompts de interação etc.). É chamado antes
+        do HUD e do diálogo, garantindo que nada fique por cima deles."""
+        pass
 
      
     def desenhar_hud(self, tela):

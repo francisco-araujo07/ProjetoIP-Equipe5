@@ -22,8 +22,8 @@ class Fase3Tela2(Level):
     ]
 
     LAYOUT_PLATAFORMAS_MOVEIS = [
-        (470, 460, 110, 40, 360, -0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
-        (660, 360, 110, 40, 460, 0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
+        (470, 460, 110, 40, 360, -1, "y", settings.IMAGEM_PLATAFORMA_COMUM),
+        (660, 360, 110, 40, 460, 1, "y", settings.IMAGEM_PLATAFORMA_COMUM),
     ]
 
     def __init__(self, player_state=None):
@@ -57,8 +57,7 @@ class Fase3Tela2(Level):
         if not self.player.esta_vivo():
             self.estado = GameState.GAME_OVER
 
-    def desenhar(self, tela):
-        super().desenhar(tela)
+    def desenhar_mundo_extra(self, tela):
         tela.blit(self.armadilha.image, self.armadilha.rect)
 
     def terminou(self):
