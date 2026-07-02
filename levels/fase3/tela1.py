@@ -23,7 +23,7 @@ class Fase3Tela1(Level):
     ]
 
     LAYOUT_PLATAFORMAS_MOVEIS = [
-        (390, settings.ALTURA_TELA - 172, 110, 40, 630, 2, "x", settings.IMAGEM_PLATAFORMA_COMUM),
+        (390, settings.ALTURA_TELA - 172, 110, 40, 630, 1, "x", settings.IMAGEM_PLATAFORMA_COMUM),
     ]
 
     def __init__(self, player_state=None):

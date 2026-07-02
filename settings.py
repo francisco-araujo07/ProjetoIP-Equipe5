@@ -38,6 +38,7 @@ SPRITE_ALAVANCA = "assets/fase2/alavanca.png"
 SPRITE_ALAVANCA_PRESSIONADA = "assets/fase2/alavanca-pressionada.png"  
 ALAVANCA_ALTURA = 96
 IMAGEM_PLATAFORMA_COMUM = "assets/comum/plataforma.png"
+IMAGEM_ARMADILHA_COMUM = "assets/comum/armadilha.png"
 ICONE_HUD_CORACAO_CHEIO = "assets/hud/coracao.png"
 ICONE_HUD_CORACAO_VAZIO = "assets/hud/coracaovazio.png"
 ICONE_HUD_POCAO = "assets/coletavel/pocao.png"

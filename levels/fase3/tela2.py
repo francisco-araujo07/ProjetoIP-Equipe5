@@ -26,11 +26,11 @@ class Fase3Tela2(Level):
     # Duas plataformas verticais em fase oposta: A comeca embaixo subindo, B comeca em cima descendo.
     # O ponto mais baixo (460) fica acima do alcance da hitbox do player parado no chao (altura do
     # sprite ~120px + espessura da propria plataforma, 40px), pra nao brigar com o chao continuo por
-    # baixo dos espinhos. Percurso curto (100px) e lento (1px/frame) pra dar bastante margem de tempo
-    # pro salto. Afastadas 80px uma da outra em X pra exigir um pulo de verdade entre elas.
+    # baixo dos espinhos. Percurso curto (100px) e lento (0.5px/frame) pra dar bastante margem
+    # de tempo pro salto. Afastadas 80px uma da outra em X pra exigir um pulo de verdade entre elas.
     LAYOUT_PLATAFORMAS_MOVEIS = [
-        (470, 460, 110, 40, 360, -1, "y", settings.IMAGEM_PLATAFORMA_COMUM),
-        (660, 360, 110, 40, 460, 1, "y", settings.IMAGEM_PLATAFORMA_COMUM),
+        (470, 460, 110, 40, 360, -0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
+        (660, 360, 110, 40, 460, 0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
     ]
 
     def __init__(self, player_state=None):
@@ -50,8 +50,10 @@ class Fase3Tela2(Level):
         self.grupo_inimigos.add(a1, a2)
 
         # Faixa de espinhos alargada pra cobrir os dois elevadores, agora mais afastados.
-        self.armadilha = ArmadilhaEspinhos((450, y_chao - 50, 340, 60))
-        self.armadilha.image.fill(settings.RED)
+        # Ancorada pela base (fica encravada no chao, com as pontas subindo).
+        self.armadilha = ArmadilhaEspinhos(
+            (450, y_chao - 70, 340, 80), caminho_imagem=settings.IMAGEM_ARMADILHA_COMUM
+        )
 
     def atualizar(self):
         super().atualizar()

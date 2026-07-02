@@ -27,7 +27,18 @@ class ArmadilhaEspinhos(pygame.sprite.Sprite):
         self.image = self._imagem_ativa if self._imagem_ativa is not None else self._imagem_transparente()
 
     def _carregar_imagem(self, caminho):
+        # Recorta a margem transparente ao redor do desenho antes de redimensionar
+        # (mesmo padrao usado em Plataforma/Player), senao a arte fica encolhida
+        # num canto do rect.
         imagem = pygame.image.load(caminho).convert_alpha()
+        areas_visiveis = pygame.mask.from_surface(imagem).get_bounding_rects()
+
+        if areas_visiveis:
+            area = areas_visiveis[0].copy()
+            for rect in areas_visiveis[1:]:
+                area.union_ip(rect)
+            imagem = imagem.subsurface(area).copy()
+
         return pygame.transform.scale(imagem, (self.rect.width, self.rect.height))
 
     def _imagem_transparente(self):
