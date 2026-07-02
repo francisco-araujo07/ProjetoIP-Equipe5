@@ -30,106 +30,152 @@ Jogo 2D desenvolvido em Python + pygame-ce, projeto da disciplina de Introduçã
 
 ---
 
-## 🏗️ Arquitetura
+# Gilded Shadows
 
-<details>
-<summary><b>Ver estrutura de pastas</b></summary>
+Platformer de ação 2D single-player em **Python + Pygame**. Projeto da disciplina de **Introdução à Programação (IP)** — Centro de Informática (CIn/UFPE), Equipe 5.
+
+## Enredo
+
+Você é **Silas**, arquiteto do castelo do Rei Aurum, preso sete anos por "saber demais". Ele retorna às masmorras que projetou para reunir os três fragmentos da **Chave Mestra**, abrir o **Cofre de Aurum** e enfrentar o guardião final. No caminho: guardas, armadilhas e um boss mecânico.
+
+## Objetivo do projeto
+
+Construir um platformer completo aplicando POO, modularização, game loop, máquina de estados e física de colisão — do menu à tela de vitória, com progressão encadeada por fases e persistência do estado do jogador entre telas.
+
+---
+
+## Como rodar
+
+**Pré-requisitos:** Python 3.
+
+```bash
+# 1. ambiente virtual
+python -m venv venv
+
+# 2. ativar (Windows / PowerShell)
+.\venv\Scripts\Activate.ps1
+#   erro de permissão? rode antes:
+#   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+# 3. dependências
+pip install -r requirements.txt
+
+# 4. executar
+python main.py
+```
+
+---
+
+## Controles
+
+**Jogo**
+- Mover: `A`/`←` e `D`/`→`
+- Pular: `SPACE`, `W` ou `↑`
+- Atacar: `Z` ou clique esquerdo
+- Usar poção: `Q`
+- Interagir (pedestal/mecanismo): `E`
+
+**Sistema**
+- `ESC` — pausar
+- `F11` — tela cheia
+- Nas telas de fim de jogo: `R` reinicia · `ESC`/`Q` sai
+
+---
+
+## Mecânicas
+
+**Combate**
+- Melee com hitbox direcional, cooldown de 400ms e golpe de 220ms
+- Cada inimigo recebe dano uma única vez por golpe
+- Vida com corações no HUD; i-frames com efeito de piscar após dano
+- Poções de cura no inventário
+
+**Inimigos**
+- **Saqueador** — patrulha rápida, pouca vida
+- **Autômato** — tanque lento, muita vida
+- **Colosso (boss)** — máquina de estados `Perseguindo → Telegrafando → Atacando → Vulnerável`; só recebe dano na janela de vulnerabilidade; barra de vida própria e morte com fade-out
+
+**Plataforma e física**
+- Colisão resolvida em X e Y separadamente
+- Distinção entre contato lateral e topo/base por sobreposição
+- Plataformas móveis (eixo X ou Y) que arrastam o jogador
+- Gravidade com teto de queda; morte ao cair fora do mapa
+
+**Coletáveis**
+- **Poção** — guardada e usada com `Q`
+- **Fragmento de Chave** — reunir 3 para progredir
+- **Gema** — dobra o dano e adiciona brilho ao personagem
+- Efeitos persistem entre telas; guarda contra aplicação dupla ao recarregar
+
+**Outros sistemas**
+- Armadilha de espinhos desativável por mecanismo (`E`), com troca de sprite/fundo
+- Diálogos com efeito máquina de escrever (~30 letras/s), congelando o jogo
+- HUD com corações e slots de inventário
+- Menu inicial, pausa, game over e vitória
+
+---
+
+## Estrutura
 
 ```
-PROJETOIP-EQUIPE5/
-├── assets/                  # Sprites, sons e imagens
-├── classes/                 # Entidades (POO)
-│   ├── armadilha.py
-│   ├── coletavel.py
-│   ├── enemy.py
-│   ├── plataforma.py
-│   └── player.py
-├── core/                    # Engine / estado do jogo
-│   ├── game.py               # Loop principal
-│   ├── game_state.py         # Estado geral da partida
-│   ├── level.py               # Lógica das fases
-│   ├── menu.py                 # Tela inicial
-│   ├── player_state.py         # Estado do player (HP, itens)
-│   └── result_screen.py        # Telas de vitória/derrota
-├── guia/                    # Planejamento técnico interno
-├── levels/                  # Dados/configuração das fases
-├── main.py                  # Entry point
-├── settings.py               # Configurações globais
+ProjetoIP-Equipe5/
+├── main.py               # ponto de entrada
+├── settings.py           # constantes globais
 ├── requirements.txt
-├── FLUXO_JOGO.md             # Fluxograma de planejamento
-└── README.md
+│
+├── core/                 # motor e fluxo
+│   ├── game.py           # loop principal + máquina de estados
+│   ├── game_state.py     # enum de estados
+│   ├── player_state.py   # dataclass de persistência entre fases
+│   ├── level.py          # classe base Level (motor de fase)
+│   ├── menu.py           # tela inicial
+│   ├── pause_screen.py   # tela de pausa
+│   └── result_screen.py  # game over / vitória
+│
+├── classes/              # entidades do mundo
+│   ├── player.py         # física, animação, ataque
+│   ├── enemy.py          # inimigos e boss
+│   ├── plataforma.py     # plataformas + funções de colisão
+│   ├── coletavel.py      # itens e efeitos
+│   └── armadilha.py      # espinhos
+│
+├── levels/               # 12 telas encadeadas
+│   ├── fase1/            # telas 1–5
+│   ├── fase2/            # telas 1–3
+│   ├── fase3/            # telas 1–3
+│   └── fase4/            # tela 1 (boss)
+│
+└── assets/               # sprites, fundos e UI
+    ├── player/  inimigos/  coletavel/  comum/
+    ├── hud/  menu/  game_over/  vitoria/
+    └── fase1/ … fase4/
 ```
 
-</details>
-
-**Separação de responsabilidades:** `classes/` = entidades (dados + comportamento); `core/` = engine (loop, estados, transições). `guia/` e `FLUXO_JOGO.md` documentam o planejamento adotado após o replanejamento do projeto.
-
-> `main_teste.py` e `teste.plataforma_movel.py` — scripts de debug, sem função no build final.
+**Progressão:** Menu → Fase 1 (5 telas) → Fase 2 (3) → Fase 3 (3) → Fase 4 (boss) → Vitória → reiniciar ou sair.
 
 ---
 
-## 🛠️ Stack
+## Tecnologias
 
-<table>
-<tr><th>Tecnologia</th><th>Justificativa</th></tr>
-<tr><td><b>Python</b></td><td>Linguagem base da disciplina</td></tr>
-<tr><td><b>pygame-ce</b></td><td>Fork ativo do pygame; usado por incompatibilidade do pygame original com Python 3.13+</td></tr>
-<tr><td><b>os</b></td><td>Manipulação de caminhos de arquivos de áudio e imagem</td></tr>
-</table>
+- **Python 3**
+- **Pygame** — engine
+- **Visual Studio Code**
 
 ---
 
-## 🖼️ Galeria
+## Conceitos aplicados
 
-<div align="center">
-<table>
-<tr>
-<td><img src="assets/screenshots/tela_inicial.png" width="400"/><br/><sub>Tela inicial</sub></td>
-<td><img src="assets/screenshots/assalto_falhou.png" width="400"/><br/><sub>Derrota</sub></td>
-</tr>
-<tr>
-<td><img src="assets/screenshots/gameplay_sala_chave.png" width="400"/><br/><sub>Gameplay: sala da chave</sub></td>
-<td><img src="assets/screenshots/gameplay_santuario.png" width="400"/><br/><sub>Gameplay: santuário</sub></td>
-</tr>
-<tr>
-<td colspan="2" align="center"><img src="assets/screenshots/vitoria.png" width="400"/><br/><sub>Vitória</sub></td>
-</tr>
-</table>
-</div>
+POO (herança, polimorfismo) · Template Method (base `Level` e coletáveis) · modularização e separação de responsabilidades · game loop · máquina de estados · colisão em dois eixos · manipulação de spritesheets · eventos em tempo real · física de plataforma · clean code.
 
 ---
 
-## 📚 Conceitos da Disciplina Aplicados
+## Roadmap
 
-<table>
-<tr><th>Conceito</th><th>Onde foi usado</th></tr>
-<tr><td><b>Laços de repetição</b></td><td><code>core/game.py</code> — loop principal, atualiza entidades a cada frame</td></tr>
-<tr><td><b>Condicionais</b></td><td>Colisão/movimento em <code>classes/player.py</code>, <code>enemy.py</code>, <code>plataforma.py</code>; verificação de HP/itens em <code>core/player_state.py</code></td></tr>
-<tr><td><b>Funções</b></td><td>Modularização — um comportamento por arquivo em <code>classes/</code> e <code>core/</code></td></tr>
-<tr><td><b>POO</b></td><td><code>classes/player.py</code> (Player), <code>enemy.py</code> (Enemy), <code>coletavel.py</code> (Coletável), <code>armadilha.py</code> (Armadilha), <code>plataforma.py</code> (Plataforma)</td></tr>
-</table>
+Efeitos sonoros e trilha · mais inimigos · animação de ataque multi-frame · checkpoints · balanceamento de dano/vida · novos itens.
 
 ---
 
-## 🧩 Desafios e Lições Aprendidas
 
-<details>
-<summary><b>Maior erro cometido</b></summary>
-<br/>
-Começar a codar antes de finalizar o planejamento visual do jogo e das fases. Solução: descarte do código inicial e reinício com planejamento prévio (documentado em <code>guia/</code> e <code>FLUXO_JOGO.md</code>).
-</details>
+## Licença
 
-<details>
-<summary><b>Maior desafio enfrentado</b></summary>
-<br/>
-Trabalho em equipe com 6 pessoas em módulos interdependentes. Resolvido com comunicação mais clara e divisão de tasks.
-</details>
-
-<details>
-<summary><b>Lições aprendidas</b></summary>
-<br/>
-
-- Planejamento pré-desenvolvimento é essencial para alinhamento do objetivo final.
-- Gestão de tempo e divisão de tasks evita sobrecarga individual.
-
-</details>
+Projeto acadêmico, para fins educacionais.
