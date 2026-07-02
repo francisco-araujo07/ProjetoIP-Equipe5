@@ -2,7 +2,7 @@ import pygame
 
 import settings
 from classes.player import Player
-from classes.plataforma import Plataforma, resolver_colisao_chao
+from classes.plataforma import Plataforma, PlataformaMovel
 from classes.coletavel import Pocao, FragmentoChave, Gema 
 from core.game_state import GameState
 
@@ -10,6 +10,7 @@ from core.game_state import GameState
 class Level:
     FUNDO = None
     LAYOUT_PLATAFORMAS = []
+    LAYOUT_PLATAFORMAS_MOVEIS = []
     DIALOGOS = []
 
     def __init__(self, player_state=None):
@@ -73,6 +74,11 @@ class Level:
             plataforma = Plataforma(x, y, largura, altura, caminho_imagem)
             self.plataformas.add(plataforma)
 
+        for entrada in self.LAYOUT_PLATAFORMAS_MOVEIS:  # NOVO
+            x, y, largura, altura, x_final, velocidade = entrada[:6]
+            caminho_imagem = entrada[6] if len(entrada) > 6 else None
+            self.plataformas.add(PlataformaMovel(x, y, largura, altura, x_final, velocidade, caminho_imagem))
+
     def processar_evento(self, evento):
         if self.dialogo_ativo:
             self.processar_evento_dialogo(evento)
@@ -116,9 +122,9 @@ class Level:
             self.atualizar_dialogo()
             return
 
-        self.player.update()
+        self.plataformas.update()
+        self.player.update(self.plataformas)
         self.grupo_inimigos.update()
-        resolver_colisao_chao(self.player, self.plataformas)
         self.checar_colisao_coletaveis()
         self.leitura_ataque()
         self.leitura_dano()

@@ -38,7 +38,9 @@ class Player(pygame.sprite.Sprite):
         self.inimigos_acertados = set()
 
         self.velocidade_y = 0
+        self.velocidade_x = 0
         self.no_chao = False
+        self.plataforma_atual = None
         self.velocidade = settings.VELOCIDADE_PLAYER
         self.vida_max = settings.PLAYER_VIDA_MAX
         self.tem_espada = False
@@ -95,7 +97,6 @@ class Player(pygame.sprite.Sprite):
         self.velocidade_y += settings.GRAVIDADE
         if self.velocidade_y > settings.VELOCIDADE_MAX_QUEDA:
             self.velocidade_y = settings.VELOCIDADE_MAX_QUEDA
-        self.rect.y += self.velocidade_y
 
     def pular(self):
         if self.no_chao:
@@ -157,21 +158,26 @@ class Player(pygame.sprite.Sprite):
 
         return hitbox
 
-    def update(self):
+    def update(self, grupo_plataformas):
+        from classes.plataforma import resolver_colisao_x, resolver_colisao_y, PlataformaMovel
         teclas = pygame.key.get_pressed()
         movendo = False
+        self.velocidade_x = 0
 
         if teclas[pygame.K_LEFT] or teclas[pygame.K_a]:
-            self.rect.x -= self.velocidade
+            self.velocidade_x = -self.velocidade
             self.direcao = -1
             movendo = True
         if teclas[pygame.K_RIGHT] or teclas[pygame.K_d]:
-            self.rect.x += self.velocidade
+            self.velocidade_x = self.velocidade
             self.direcao = 1
             movendo = True
 
         self.movendo = movendo
         self.atualizar_animacao()
+
+        self.rect.x += self.velocidade_x
+        resolver_colisao_x(self, grupo_plataformas)
 
         if self.rect.left < 0:
             self.rect.left = 0
@@ -179,6 +185,13 @@ class Player(pygame.sprite.Sprite):
             self.rect.right = settings.LARGURA_TELA
 
         self.aplicar_gravidade()
+        self.rect.y += self.velocidade_y
+        resolver_colisao_y(self, grupo_plataformas)
+
+        if isinstance(self.plataforma_atual, PlataformaMovel): 
+            self.rect.x += self.plataforma_atual.velocidade_x
+            self.rect.y += self.plataforma_atual.velocidade_y
+        
         self.atualizar_ataque()
         self.atualizar_invencibilidade()
 
