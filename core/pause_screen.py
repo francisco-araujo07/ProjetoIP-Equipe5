@@ -4,7 +4,7 @@ import settings
  
  
 class PauseScreen:
-    """Overlay de pausa. Desenhado por cima do nível já renderizado (congelado)."""
+    """Tela de pausa, desenhada por cima do jogo congelado."""
  
     def __init__(self):
         self.continuar_solicitado = False
@@ -24,7 +24,7 @@ class PauseScreen:
             self.sair_solicitado = True
  
     def desenhar(self, tela):
-        # Overlay escuro semi-transparente por cima do frame congelado do nível
+        # fundo escuro transparente por cima do jogo
         overlay = pygame.Surface((settings.LARGURA_TELA, settings.ALTURA_TELA), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 160))
         tela.blit(overlay, (0, 0))

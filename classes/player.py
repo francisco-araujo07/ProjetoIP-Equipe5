@@ -59,6 +59,7 @@ class Player(pygame.sprite.Sprite):
         self.atualizar_visual()
 
     def recortar_frames(self, caminho, quantidade_frames, altura_desejada):
+        # corta a spritesheet em varios frames e redimensiona cada um
         sheet = pygame.image.load(caminho).convert_alpha()
         frame_width = sheet.get_width() // quantidade_frames
         frame_height = sheet.get_height()
@@ -80,6 +81,7 @@ class Player(pygame.sprite.Sprite):
         return frames
 
     def carregar_frame(self, caminho, altura_desejada):
+        # carrega um unico frame e corta as bordas vazias
         frame = pygame.image.load(caminho).convert_alpha()
         areas_visiveis = pygame.mask.from_surface(frame).get_bounding_rects()
 
@@ -94,11 +96,13 @@ class Player(pygame.sprite.Sprite):
         return pygame.transform.smoothscale(frame, tamanho)
 
     def aplicar_gravidade(self):
+        # aumenta a velocidade de queda ate um limite maximo
         self.velocidade_y += settings.GRAVIDADE
         if self.velocidade_y > settings.VELOCIDADE_MAX_QUEDA:
             self.velocidade_y = settings.VELOCIDADE_MAX_QUEDA
 
     def pular(self):
+        # so pula se estiver no chao
         if self.no_chao:
             self.velocidade_y = -settings.FORCA_PULO
             self.no_chao = False
@@ -143,6 +147,7 @@ class Player(pygame.sprite.Sprite):
             self.invencivel = False
 
     def _criar_hitbox_ataque(self):
+        # cria a hitbox do ataque na frente do player, de acordo com a direcao
         hitbox = pygame.Rect(
             0,
             0,
@@ -176,11 +181,12 @@ class Player(pygame.sprite.Sprite):
         self.movendo = movendo
         self.atualizar_animacao()
 
-        # Arrasta o player junto com a plataforma móvel em que ele está, nos dois eixos. 
+        # se o player esta em cima de uma plataforma movel, anda junto com ela
         if isinstance(self.plataforma_atual, PlataformaMovel):
             self.rect.x += self.plataforma_atual.velocidade_x
             self.rect.y += self.plataforma_atual.velocidade_y
 
+        # move no eixo x e resolve colisao com as plataformas
         self.rect.x += self.velocidade_x
         resolver_colisao_x(self, grupo_plataformas)
 
@@ -189,6 +195,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right > settings.LARGURA_TELA:
             self.rect.right = settings.LARGURA_TELA
 
+        # move no eixo y (cai com a gravidade) e resolve colisao com o chao
         self.aplicar_gravidade()
         self.rect.y += self.velocidade_y
         resolver_colisao_y(self, grupo_plataformas)
@@ -197,6 +204,7 @@ class Player(pygame.sprite.Sprite):
         self.atualizar_invencibilidade()
 
     def levar_dano(self, valor):
+        # tira vida e deixa o player invencivel por um tempo
         if not self.invencivel:
             self.vida -= valor
 
@@ -213,6 +221,7 @@ class Player(pygame.sprite.Sprite):
         return self.vida > 0
 
     def atualizar_animacao(self):
+        # avanca o frame da animacao e volta pro comeco quando termina
         self.frame_index += self.animation_speed
         frames = self._frames_atuais()
 
@@ -264,12 +273,12 @@ class Player(pygame.sprite.Sprite):
         estado.pocoes = self.pocoes
 
     def desenhar_efeito_gema(self, tela):
-        """Desenha brilho dourado pulsante ao redor do player quando tem_gema=True."""
+        """Desenha um brilho dourado ao redor do player quando ele tem a gema."""
         if not self.tem_gema:
             return
 
         agora = pygame.time.get_ticks()
-        # sin oscila entre -1 e 1 → alpha entre 60 e 140
+        # faz o brilho pulsar com o tempo
         pulso = math.sin(agora / 300)
         alpha = int(100 + pulso * 40)
 
@@ -279,7 +288,7 @@ class Player(pygame.sprite.Sprite):
 
         superficie_brilho = pygame.Surface((largura_brilho, altura_brilho), pygame.SRCALPHA)
 
-        # Três elipses concêntricas com alpha decrescente para suavizar as bordas
+        # desenha varias elipses uma dentro da outra pra suavizar o brilho
         for camada, fator_alpha in enumerate([alpha, alpha // 2, alpha // 4]):
             recuo = camada * 3
             rect_elipse = pygame.Rect(recuo, recuo, largura_brilho - recuo * 2, altura_brilho - recuo * 2)

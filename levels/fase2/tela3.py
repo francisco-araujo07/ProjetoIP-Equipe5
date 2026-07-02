@@ -51,6 +51,7 @@ class Fase2Tela3(Level):
             super().processar_evento(evento)
             return
 
+        # aperta E perto do pedestal (com os inimigos mortos) pra pegar o fragmento
         if (
             evento.type == pygame.KEYDOWN
             and evento.key == pygame.K_e
@@ -81,6 +82,7 @@ class Fase2Tela3(Level):
             tela.blit(prompt, (self.pedestal_rect.x - 62, self.pedestal_rect.y - 42))
 
     def _desenhar_fragmento_animado(self, tela):
+        # usa seno pra fazer o fragmento flutuar e o brilho pulsar
         tempo = pygame.time.get_ticks() / 300
         pulso = math.sin(tempo)
         deslocamento_y = int(pulso * 4)
@@ -97,6 +99,7 @@ class Fase2Tela3(Level):
         brilho = pygame.Surface((96, 96), pygame.SRCALPHA)
         centro = (48, 48)
 
+        # circulos um dentro do outro fazem o brilho ao redor do fragmento
         for raio, fator_alpha in ((42, 0.25), (30, 0.45), (18, 0.75)):
             cor = (255, 210, 70, int(alpha * fator_alpha))
             pygame.draw.circle(brilho, cor, centro, raio)

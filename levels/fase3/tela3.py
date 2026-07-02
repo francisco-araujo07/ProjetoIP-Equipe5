@@ -40,6 +40,7 @@ class Fase3Tela3(Level):
         self.fragmento_coletado = self.player.fragmentos_chave >= 3
         self.fonte_prompt = pygame.font.Font(None, 30)
 
+        # se ja pegou o fragmento, a porta ja comeca aberta
         if self.fragmento_coletado:
             self.fundo = self.fundo_porta_aberta
 
@@ -78,6 +79,7 @@ class Fase3Tela3(Level):
             and evento.key == pygame.K_e
             and self.pode_coletar_fragmento()
         ):
+            # pegou o fragmento: troca o fundo pra porta aberta e mostra a mensagem
             self.fragmento.coletar(self.player)
             self.fragmento_coletado = True
             self.fundo = self.fundo_porta_aberta
@@ -140,6 +142,7 @@ class Fase3Tela3(Level):
         tela.blit(brilho, (centro_x - 48, centro_y - 48))
 
     def _desenhar_banner_conclusao(self, tela):
+        # mostra o aviso de "Chave Mestra Concluida" na tela
         texto = self.fonte_mensagem.render("Chave Mestra Concluida!", True, settings.YELLOW)
         centro_x = settings.LARGURA_TELA // 2
         centro_y = 110

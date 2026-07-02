@@ -10,5 +10,5 @@ if __name__ == "__main__":
     # Inicializa o gerenciador principal do jogo
     gilded_shadows = Game()
     
-    # Inicia o loop principal (orquestrando Menu, Gameplay, Pausa)
+    # roda o jogo (menu, fases, pausa)
     gilded_shadows.rodar()

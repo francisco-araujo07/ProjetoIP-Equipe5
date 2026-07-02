@@ -37,6 +37,7 @@ class Fase3Tela1(Level):
         if self.dialogo_ativo or self.estado != GameState.PLAYING:
             return
 
+        # se o player cair no poco, morre na hora
         if self.player.rect.top > settings.ALTURA_TELA:
             self.player.vida = 0
             self.estado = GameState.GAME_OVER

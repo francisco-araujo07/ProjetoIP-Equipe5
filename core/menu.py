@@ -9,17 +9,17 @@ class TelaIntroducao:
         self.background = pygame.image.load("assets/menu/menu_principal.png").convert()
         self.background = pygame.transform.scale(self.background, (1280, 720))
         
-        # Caixas de colisão invisíveis sintonizadas com a arte da IA
+        # area de clique dos botoes (invisivel, so pra pegar o clique)
         self.rect_iniciar = pygame.Rect(470, 495, 340, 90)
         self.rect_sair = pygame.Rect(490, 605, 300, 80)
         self.cor_seletor = (212, 175, 55)
-        
-        # Flags de controle idênticas ao padrão da sua ResultScreen
+
+        # guarda se o jogador clicou em iniciar ou sair
         self.iniciar_solicitado = False
         self.sair_solicitado = False
 
     def processar_evento(self, evento):
-        """Processa cliques apenas quando o loop principal do jogo requisitar."""
+        """Trata o clique nos botoes de iniciar e sair."""
         posicao_mouse = pygame.mouse.get_pos()
         if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
             if self.rect_iniciar.collidepoint(posicao_mouse):
@@ -28,13 +28,13 @@ class TelaIntroducao:
                 self.sair_solicitado = True
 
     def desenhar(self, superficie):
-        """Renderiza o fundo e calcula os efeitos dinâmicos de foco (Hover)."""
+        """Desenha o fundo e o efeito de quando o mouse passa em cima dos botoes."""
         posicao_mouse = pygame.mouse.get_pos()
-        
-        # Blit da imagem gerada pela IA
+
+        # imagem de fundo do menu
         superficie.blit(self.background, (0, 0))
-        
-        # Desenha marcadores poligonais discretos nas laterais caso o mouse aponte para o botão
+
+        # desenha as setinhas do lado do botao quando o mouse passa em cima
         if self.rect_iniciar.collidepoint(posicao_mouse):
             pygame.draw.polygon(superficie, self.cor_seletor, [(430, 530), (430, 550), (450, 540)])
             pygame.draw.polygon(superficie, self.cor_seletor, [(850, 530), (850, 550), (830, 540)])

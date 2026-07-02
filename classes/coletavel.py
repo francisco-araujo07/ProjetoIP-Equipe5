@@ -25,10 +25,7 @@ class Coletavel(pygame.sprite.Sprite):
         pass
  
  
-# ---------------------------------------------------------------------------
-# Poção — restaura vida
-# ---------------------------------------------------------------------------
- 
+# pocao: restaura vida
 class Pocao(Coletavel):
     """Restaura vida ao player sem ultrapassar vida máxima."""
  
@@ -47,10 +44,7 @@ class Pocao(Coletavel):
         player.pocoes += 1
  
  
-# ---------------------------------------------------------------------------
-# Fragmento de Chave — acumula em player.fragmentos_chave (int)
-# ---------------------------------------------------------------------------
- 
+# fragmento de chave: soma 1 em player.fragmentos_chave
 class FragmentoChave(Coletavel):
     """Incrementa player.fragmentos_chave em 1."""
  
@@ -61,13 +55,8 @@ class FragmentoChave(Coletavel):
         player.fragmentos_chave += 1
  
  
-# ---------------------------------------------------------------------------
-# Gema — marca player.tem_gema = True
-# ---------------------------------------------------------------------------
- 
+# gema: da player.tem_gema = True e dobra o dano
 class Gema(Coletavel):
-    #Concede a gema ao player (player.tem_gema = True) e dobra o dano.
- 
     def __init__(self, x, y):
         super().__init__(x, y, largura=32, altura=32)
  

@@ -107,6 +107,7 @@ class Level:
             return
 
         texto_atual = self.DIALOGOS[self.dialogo_indice]
+        # se o texto ainda ta aparecendo, o primeiro toque so completa ele
         if self.dialogo_caracteres < len(texto_atual):
             self.dialogo_caracteres = len(texto_atual)
             return
@@ -133,6 +134,7 @@ class Level:
         self.salvar_estado_jogador()
 
     def atualizar_dialogo(self):
+        # efeito de maquina de escrever: vai revelando uma letra por vez
         agora = pygame.time.get_ticks()
         intervalo = 1000 / settings.TYPEWRITER_LETRAS_POR_SEGUNDO
 
@@ -168,7 +170,7 @@ class Level:
 
  
     def _desenhar_coracoes(self, tela):
-        # Linha de corações no canto superior esquerdo. Um coração representa cada 10 pontos de vida.
+        # desenha os coracoes de vida (cada coracao = 10 de vida)
         TAMANHO   = settings.TAM_ICONE_CORACAO
         ESPACO    = settings.ESPACO_CORACAO_HUD
         X_INICIO  = settings.X_INICIO_HUD
@@ -266,8 +268,7 @@ class Level:
             )
             tela.blit(self.icone_gema, icone_rect)
     def _desenhar_contador_slot(self, tela, texto, x, y, tamanho):
-        
-        #Desenha um número no canto inferior direito do slot, com sombra
+        # desenha um numero no canto do slot, com sombra
         superficie = self.fonte_slot.render(texto, True, settings.WHITE)
         sombra = self.fonte_slot.render(texto, True, (0, 0, 0))
         pos_x = x + tamanho - superficie.get_width() - 2
@@ -302,6 +303,7 @@ class Level:
             return
 
         for inimigo in self.grupo_inimigos:
+            # cada inimigo so pode ser acertado uma vez por ataque
             if id(inimigo) in self.player.inimigos_acertados:
                 continue
 

@@ -1,10 +1,6 @@
 """Constantes globais usadas por todo o projeto."""
 
-# ============================================================
-#  Settings.py — única fonte de constantes do projeto
-#  Todos os outros arquivos importam daqui. Proibido número
-#  mágico fora deste arquivo.
-# ============================================================
+# arquivo com todas as constantes do jogo, os outros arquivos importam daqui
 
 # --- Display ---
 LARGURA_TELA = 1280
@@ -12,7 +8,7 @@ ALTURA_TELA = 720
 RENDER_WIDTH  = 0
 RENDER_HEIGHT = 0
 FPS           = 60
-TITULO_TESTE = "Phyntom"
+TITULO_TESTE = "Gilded Shadows"
 
 # --- Assets ---
 SPRITE_PLAYER_SEM_ESPADA = "assets/fase1/player-sem-espada.png"
@@ -110,7 +106,7 @@ AUTOMATO_VELOCIDADE = 1
 
 # --- Boss: Colosso Mecanico ---
 SPRITE_BOSS_ATACANDO = "assets/inimigos/sprite-boss-atacando.png"
-COLOSSO_VIDA = 300
+COLOSSO_VIDA = 220
 COLOSSO_DANO_TOQUE = 10
 COLOSSO_DANO_MARRETA = 35
 COLOSSO_VELOCIDADE = 2

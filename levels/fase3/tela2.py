@@ -40,6 +40,7 @@ class Fase3Tela2(Level):
         a2 = Automato(1080, y_chao - 64, 1000, 1170)
         self.grupo_inimigos.add(a1, a2)
 
+        # armadilha de espinhos no chao
         self.armadilha = ArmadilhaEspinhos(
             (450, y_chao - 70, 340, 80), caminho_imagem=settings.IMAGEM_ARMADILHA_COMUM
         )
@@ -50,6 +51,7 @@ class Fase3Tela2(Level):
         if self.dialogo_ativo or self.estado != GameState.PLAYING:
             return
 
+        # checa se o player pisou nos espinhos
         self.armadilha.aplicar_dano(self.player)
 
         if not self.player.esta_vivo():

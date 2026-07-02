@@ -23,6 +23,7 @@ class Fase1Tela3(Level):
     def __init__(self, player_state=None):
         super().__init__(player_state)
 
+        # carrega a espada e ja calcula onde ela fica na tela
         self.espada_image = self._carregar_imagem_espada()
         self.espada_base_center = (
             settings.LARGURA_TELA // 2,
@@ -35,6 +36,7 @@ class Fase1Tela3(Level):
         imagem = pygame.image.load(settings.SPRITE_ESPADA_COLETAVEL).convert_alpha()
         areas_visiveis = pygame.mask.from_surface(imagem).get_bounding_rects()
 
+        # corta o espaco vazio em volta da espada na imagem
         if areas_visiveis:
             area = areas_visiveis[0].copy()
             for rect in areas_visiveis[1:]:
@@ -51,6 +53,7 @@ class Fase1Tela3(Level):
             super().processar_evento(evento)
             return
 
+        # aperta E perto da espada pra pegar ela
         if (
             evento.type == pygame.KEYDOWN
             and evento.key == pygame.K_e
@@ -81,6 +84,7 @@ class Fase1Tela3(Level):
             tela.blit(prompt, prompt_rect)
 
     def _desenhar_espada_animada(self, tela):
+        # usa seno pra espada subir e descer e o brilho piscar, tipo flutuando
         tempo = pygame.time.get_ticks() / 300
         pulso = math.sin(tempo)
         deslocamento_y = int(pulso * 4)
@@ -98,6 +102,7 @@ class Fase1Tela3(Level):
         brilho = pygame.Surface((largura, altura), pygame.SRCALPHA)
         centro = (largura // 2, altura // 2)
 
+        # desenha varios ovais um dentro do outro pra fazer o brilho ao redor da espada
         for escala, fator_alpha in ((0.52, 0.25), (0.38, 0.45), (0.24, 0.75)):
             rect = pygame.Rect(0, 0, int(largura * escala), int(altura * escala))
             rect.center = centro

@@ -41,6 +41,7 @@ class Fase4Tela1(Level):
         if self.dialogo_ativo or self.estado != GameState.PLAYING:
             return
 
+        # se a marretada do boss acertar o player, tira vida dele
         hitbox = self.boss.hitbox_marreta()
         if hitbox is not None and self.player.rect.colliderect(hitbox):
             self.player.levar_dano(settings.COLOSSO_DANO_MARRETA)

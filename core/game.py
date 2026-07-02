@@ -21,6 +21,7 @@ from levels.fase4.tela1 import Fase4Tela1
 
 
 class Game:
+    # ordem das fases do jogo
     SEQUENCIA_LEVELS = [
         Fase1Tela1,
         Fase1Tela2,
@@ -73,12 +74,14 @@ class Game:
         self.nivel.salvar_estado_jogador()
         self.nivel_atual += 1
 
+        # se ainda tem fase na lista, carrega ela, senao venceu o jogo
         if self.nivel_atual < len(self.SEQUENCIA_LEVELS):
             self.nivel = self.SEQUENCIA_LEVELS[self.nivel_atual](self.player_state)
         else:
             self._mostrar_resultado(GameState.WIN)
 
     def processar_eventos(self):
+        # trata os eventos de um jeito diferente dependendo do estado atual
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 self.rodando = False
@@ -97,6 +100,7 @@ class Game:
                         self._pausar()  
 
     def atualizar(self):
+        # cada estado do jogo (pausa, menu, resultado, jogando) atualiza de um jeito
         if self.estado == GameState.PAUSED:
             if self.tela_pausa.continuar_solicitado:
                 self.estado = GameState.PLAYING
@@ -124,6 +128,7 @@ class Game:
             self._mostrar_resultado(GameState.GAME_OVER)
             return
 
+        # se o jogador terminou a fase, vai pra proxima
         if self.nivel.terminou():
             self._avancar_nivel()
 
@@ -140,6 +145,7 @@ class Game:
         pygame.display.flip()
 
     def rodar(self):
+        # loop principal do jogo
         while self.rodando:
             self.processar_eventos()
             self.atualizar()

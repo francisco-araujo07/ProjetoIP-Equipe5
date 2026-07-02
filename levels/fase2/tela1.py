@@ -24,9 +24,7 @@ class Fase2Tela1(Level):
     def __init__(self, player_state=None):
         super().__init__(player_state)
 
-    def __init__(self, player_state=None):
-        super().__init__(player_state)
-
+        # guarda o fundo alternativo pra trocar quando a armadilha for desativada
         self.fundo_armadilha_desativada = self._carregar_fundo(self.FUNDO_ARMADILHA_DESATIVADA)
         self.armadilha = ArmadilhaEspinhos(settings.FASE2_TELA1_ESPINHOS_RECT)
         self.mecanismo_rect = pygame.Rect(settings.FASE2_TELA1_MECANISMO_RECT)  
@@ -84,6 +82,7 @@ class Fase2Tela1(Level):
             super().processar_evento(evento)
             return
 
+        # aperta E perto do mecanismo pra desligar a armadilha e trocar o fundo/alavanca
         if (
             evento.type == pygame.KEYDOWN
             and evento.key == pygame.K_e

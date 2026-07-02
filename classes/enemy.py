@@ -48,6 +48,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.midbottom = base_rect.midbottom
 
     def recortar_frames(self, caminho, quantidade_frames, altura_desejada):
+        # corta a spritesheet em varios frames e redimensiona cada um
         sheet = pygame.image.load(caminho).convert_alpha()
         frame_width = sheet.get_width() // quantidade_frames
         frame_height = sheet.get_height()
@@ -75,6 +76,7 @@ class Enemy(pygame.sprite.Sprite):
         self._aplicar_limites()
 
     def _aplicar_limites(self):
+        # inverte a direcao quando bate nos limites da patrulha
         if self.rect.left <= self.limite_esquerdo:
             self.rect.left = self.limite_esquerdo
             self.direcao = 1
@@ -141,9 +143,7 @@ class Automato(Enemy):
 
 
 class Colosso(Enemy):
-    """Boss final. Persegue o player e ataca em ciclo: telegrafa a marretada,
-    golpeia numa hitbox propria (fora do leitura_dano/leitura_ataque genericos),
-    e so fica vulneravel a dano por uma janela curta depois do golpe."""
+    """Boss final. Persegue o player e ataca com uma marreta."""
 
     PERSEGUINDO = "perseguindo"
     TELEGRAFANDO = "telegrafando"
@@ -202,12 +202,14 @@ class Colosso(Enemy):
         agora = pygame.time.get_ticks()
         decorrido = agora - self.tempo_estado
 
+        # maquina de estados do boss: persegue, avisa o ataque, ataca e fica vulneravel
         if self.estado == self.PERSEGUINDO:
             self._perseguir()
             self.atualizar_animacao()
             if abs(self._player.rect.centerx - self.rect.centerx) <= settings.COLOSSO_DISTANCIA_GATILHO:
                 self._mudar_estado(self.TELEGRAFANDO)
         elif self.estado == self.TELEGRAFANDO:
+            # tempo de aviso antes do golpe
             if decorrido >= settings.COLOSSO_TELEGRAFANDO_MS:
                 self._mudar_estado(self.ATACANDO)
         elif self.estado == self.ATACANDO:
@@ -215,10 +217,12 @@ class Colosso(Enemy):
             if decorrido >= settings.COLOSSO_ATACANDO_MS:
                 self._mudar_estado(self.VULNERAVEL)
         elif self.estado == self.VULNERAVEL:
+            # so pode tomar dano nesse periodo
             if decorrido >= settings.COLOSSO_VULNERAVEL_MS:
                 self._mudar_estado(self.PERSEGUINDO)
 
     def _perseguir(self):
+        # anda em direcao ao player
         if self._player.rect.centerx > self.rect.centerx:
             self.direcao = 1
         elif self._player.rect.centerx < self.rect.centerx:
@@ -232,12 +236,14 @@ class Colosso(Enemy):
             self.rect.right = self.limite_direito
 
     def _mudar_estado(self, novo_estado):
+        # troca de estado e reseta o cronometro
         self.estado = novo_estado
         self.tempo_estado = pygame.time.get_ticks()
         self.vulneravel = novo_estado == self.VULNERAVEL
         self._hitbox_marreta = self._criar_hitbox_marreta() if novo_estado == self.ATACANDO else None
 
     def _criar_hitbox_marreta(self):
+        # cria a hitbox da marretada na frente do boss
         hitbox = pygame.Rect(0, 0, settings.COLOSSO_MARRETA_LARGURA, settings.COLOSSO_MARRETA_ALTURA)
         hitbox.centery = self.rect.centery
 
@@ -260,6 +266,7 @@ class Colosso(Enemy):
         self.rect.centerx = centerx
 
     def levar_dano(self, valor):
+        # boss so leva dano quando esta vulneravel e ainda nao morreu
         if not self.vulneravel or self.morrendo:
             return
 
@@ -275,6 +282,7 @@ class Colosso(Enemy):
         self.tempo_morte = pygame.time.get_ticks()
 
     def _atualizar_morte(self):
+        # vai sumindo (fade out) ate morrer de vez
         decorrido = pygame.time.get_ticks() - self.tempo_morte
         progresso = min(1.0, decorrido / settings.COLOSSO_MORTE_FADE_MS)
         self.image.set_alpha(int(255 * (1 - progresso)))
@@ -290,9 +298,11 @@ class Colosso(Enemy):
         decorrido = agora - self.tempo_estado
 
         if self.estado == self.TELEGRAFANDO:
+            # brilho vermelho crescente avisando o golpe
             progresso = min(1.0, decorrido / settings.COLOSSO_TELEGRAFANDO_MS)
             self._desenhar_glow(tela, (255, 60, 40), int(200 * progresso))
         elif self.estado == self.VULNERAVEL:
+            # brilho amarelo pulsando enquanto pode tomar dano
             pulso = math.sin(agora / 150)
             self._desenhar_glow(tela, (255, 210, 70), int(140 + pulso * 80))
 
