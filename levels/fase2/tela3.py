@@ -24,14 +24,14 @@ class Fase2Tela3(Level):
         super().__init__(player_state)
 
         self.pedestal_rect = pygame.Rect(
-            900 - 45,
+            settings.LARGURA_TELA - 550,
             settings.ALTURA_TELA - 370,
             90,
             118,
         )
         self.fragmento = FragmentoChave(0, 0)
         self.fragmento.image = self._carregar_imagem_fragmento()
-        self.fragmento_base_center = (self.pedestal_rect.centerx - 130, self.pedestal_rect.y + 26)
+        self.fragmento_base_center = (self.pedestal_rect.centerx - 20, self.pedestal_rect.y + 26)
         self.fragmento_coletado = self.player.fragmentos_chave >= 2
         self.fonte_prompt = pygame.font.Font(None, 30)
 
