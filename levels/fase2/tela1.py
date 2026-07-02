@@ -82,8 +82,8 @@ class Fase2Tela1(Level):
 
     def desenhar(self, tela):
         super().desenhar(tela)
-        tela.blit(self.alavanca_image, self.alavanca_rect)
 
+        tela.blit(self.alavanca_image, self.alavanca_rect)
         if self.pode_desativar_armadilha():
             prompt = self.fonte_prompt.render("[E] Desativar armadilha", True, settings.WHITE)
             prompt_rect = prompt.get_rect(center=(self.mecanismo_rect.centerx, self.mecanismo_rect.top - 24))
