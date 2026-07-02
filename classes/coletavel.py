@@ -57,19 +57,6 @@ class FragmentoChave(Coletavel):
     def __init__(self, x, y):
         super().__init__(x, y, largura=28, altura=28)
  
-    def _desenhar(self):
-        w, h = self.image.get_size()
-        cx, cy = w // 2, h // 2
-        # Cabo (círculo dourado)
-        pygame.draw.circle(self.image, (220, 170, 0), (cx - 4, cy - 3), 8)
-        pygame.draw.circle(self.image, (255, 210, 60), (cx - 4, cy - 3), 8, 2)
-        pygame.draw.circle(self.image, (255, 240, 160), (cx - 7, cy - 6), 3)  # brilho
-        # Haste
-        pygame.draw.rect(self.image, (220, 170, 0), (cx, cy - 2, 10, 4))
-        # Dentes
-        pygame.draw.rect(self.image, (220, 170, 0), (cx + 6, cy + 2, 3, 4))
-        pygame.draw.rect(self.image, (220, 170, 0), (cx + 2, cy + 2, 3, 3))
- 
     def _aplicar_efeito(self, player):
         player.fragmentos_chave += 1
  
@@ -79,32 +66,16 @@ class FragmentoChave(Coletavel):
 # ---------------------------------------------------------------------------
  
 class Gema(Coletavel):
-    """Concede a gema ao player (player.tem_gema = True)."""
+    #Concede a gema ao player (player.tem_gema = True) e dobra o dano.
  
-    PALETAS = {
-        "azul":     ((50, 100, 255),  (160, 200, 255)),
-        "vermelha": ((210, 30,  30),  (255, 140, 140)),
-        "verde":    ((30, 160,  50),  (140, 255, 170)),
-        "amarela":  ((220, 190, 10),  (255, 235, 120)),
-    }
- 
-    def __init__(self, x, y, cor="azul"):
-        self.cor = cor
-        super().__init__(x, y, largura=24, altura=24)
+    def __init__(self, x, y):
+        super().__init__(x, y, largura=32, altura=32)
  
     def _desenhar(self):
+        imagem = pygame.image.load("assets/coletavel/gema.png").convert_alpha()
         w, h = self.image.get_size()
-        cx, cy = w // 2, h // 2
-        base, brilho = self.PALETAS.get(self.cor, self.PALETAS["azul"])
- 
-        # Forma de diamante
-        pontos = [(cx, 2), (w - 2, cy), (cx, h - 2), (2, cy)]
-        pygame.draw.polygon(self.image, base, pontos)
-        pygame.draw.polygon(self.image, brilho, pontos, 2)
- 
-        # Faceta interna (brilho)
-        faceta = [(cx, 5), (cx + 5, cy - 2), (cx, cy - 1), (cx - 5, cy - 2)]
-        pygame.draw.polygon(self.image, brilho, faceta)
+        imagem = pygame.transform.smoothscale(imagem, (w, h))
+        self.image.blit(imagem, (0, 0))
  
     def _aplicar_efeito(self, player):
         if not player.tem_gema:   # evita dobrar o dano duas vezes se recarregar a tela

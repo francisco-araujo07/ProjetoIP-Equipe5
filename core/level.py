@@ -56,6 +56,10 @@ class Level:
             pygame.image.load(settings.ICONE_HUD_POCAO).convert_alpha(),
             (settings.TAM_ICONE_SLOT, settings.TAM_ICONE_SLOT),
         )
+        self.icone_gema = pygame.transform.scale(
+        pygame.image.load(settings.ICONE_HUD_GEMA).convert_alpha(),
+        (settings.TAM_ICONE_SLOT, settings.TAM_ICONE_SLOT),
+        )
 
         self.criar_plataformas()
 
@@ -247,6 +251,12 @@ class Level:
             pos_y = y + tamanho - superficie.get_height() - 1
             tela.blit(sombra, (pos_x + 1, pos_y + 1))
             tela.blit(superficie, (pos_x, pos_y))
+        
+        elif tipo == "gema" and self.player.tem_gema:
+            icone_rect = self.icone_gema.get_rect(
+                center=(x + tamanho // 2, y + tamanho // 2)
+            )
+            tela.blit(self.icone_gema, icone_rect)
     def _desenhar_contador_slot(self, tela, texto, x, y, tamanho):
         
         #Desenha um número no canto inferior direito do slot, com sombra
