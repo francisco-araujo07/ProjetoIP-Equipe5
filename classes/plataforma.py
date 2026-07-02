@@ -80,26 +80,25 @@ class PlataformaMovel(Plataforma):
         pos_inicial = x if eixo == "x" else y
         self.pos_min = min(pos_inicial, destino)
         self.pos_max = max(pos_inicial, destino)
+        # Posicao "verdadeira" guardada em float — pygame.Rect trunca pra int a cada
+        # atribuicao, entao uma velocidade fracionaria (< 1) nunca acumularia progresso
+        # se somada direto no rect (ficaria travada pra sempre no mesmo pixel).
+        self._pos = float(pos_inicial)
 
     def update(self, *args):
-        if self.eixo == "x":
-            self.rect.x += self.velocidade_x
-            pos_atual = self.rect.x
-        else:
-            self.rect.y += self.velocidade_y
-            pos_atual = self.rect.y
+        velocidade = self.velocidade_x if self.eixo == "x" else self.velocidade_y
+        self._pos += velocidade
 
-        if pos_atual >= self.pos_max:
-            if self.eixo == "x":
-                self.rect.x = self.pos_max
-                self.velocidade_x = -abs(self.velocidade_x)
-            else:
-                self.rect.y = self.pos_max
-                self.velocidade_y = -abs(self.velocidade_y)
-        elif pos_atual <= self.pos_min:
-            if self.eixo == "x":
-                self.rect.x = self.pos_min
-                self.velocidade_x = abs(self.velocidade_x)
-            else:
-                self.rect.y = self.pos_min
-                self.velocidade_y = abs(self.velocidade_y)
+        if self._pos >= self.pos_max:
+            self._pos = self.pos_max
+            velocidade = -abs(velocidade)
+        elif self._pos <= self.pos_min:
+            self._pos = self.pos_min
+            velocidade = abs(velocidade)
+
+        if self.eixo == "x":
+            self.velocidade_x = velocidade
+            self.rect.x = round(self._pos)
+        else:
+            self.velocidade_y = velocidade
+            self.rect.y = round(self._pos)
