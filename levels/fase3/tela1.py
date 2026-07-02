@@ -15,8 +15,6 @@ class Fase3Tela1(Level):
         "Preciso de precisao... ou de algo que amplifique minha forca.",
     ]
 
-    # Chao inicial e o chao de metal do outro lado, com um poco de engrenagens
-    # (morte instantanea) entre os dois — atravessado pela plataforma movel.
     LAYOUT_PLATAFORMAS = [
         (0, settings.ALTURA_TELA - 90, 380, 90),
         (740, settings.ALTURA_TELA - 90, settings.LARGURA_TELA - 740, 90),

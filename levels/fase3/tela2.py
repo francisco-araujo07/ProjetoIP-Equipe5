@@ -17,17 +17,10 @@ class Fase3Tela2(Level):
         "O preco? Um salto cego entre as engrenagens que sobem.",
     ]
 
-    # Chao continuo (sem vao) — uma faixa de espinhos no trecho sob as plataformas
-    # verticais substitui o poco mortal: errar o salto custa dano, nao a vida toda.
     LAYOUT_PLATAFORMAS = [
         (0, settings.ALTURA_TELA - 90, settings.LARGURA_TELA, 90),
     ]
 
-    # Duas plataformas verticais em fase oposta: A comeca embaixo subindo, B comeca em cima descendo.
-    # O ponto mais baixo (460) fica acima do alcance da hitbox do player parado no chao (altura do
-    # sprite ~120px + espessura da propria plataforma, 40px), pra nao brigar com o chao continuo por
-    # baixo dos espinhos. Percurso curto (100px) e lento (0.5px/frame) pra dar bastante margem
-    # de tempo pro salto. Afastadas 80px uma da outra em X pra exigir um pulo de verdade entre elas.
     LAYOUT_PLATAFORMAS_MOVEIS = [
         (470, 460, 110, 40, 360, -0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
         (660, 360, 110, 40, 460, 0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
@@ -36,8 +29,6 @@ class Fase3Tela2(Level):
     def __init__(self, player_state=None):
         super().__init__(player_state)
 
-        # Plataforma da gema fica ao lado do topo do elevador B (nao em cima), so um pulo curto
-        # horizontal + uma leve subida — e da pra descer direto andando pro chao B logo depois.
         plataforma_gema = Plataforma(810, 300, 170, 40, settings.IMAGEM_PLATAFORMA_COMUM)
         self.plataformas.add(plataforma_gema)
 
@@ -49,8 +40,6 @@ class Fase3Tela2(Level):
         a2 = Automato(1080, y_chao - 64, 1000, 1170)
         self.grupo_inimigos.add(a1, a2)
 
-        # Faixa de espinhos alargada pra cobrir os dois elevadores, agora mais afastados.
-        # Ancorada pela base (fica encravada no chao, com as pontas subindo).
         self.armadilha = ArmadilhaEspinhos(
             (450, y_chao - 70, 340, 80), caminho_imagem=settings.IMAGEM_ARMADILHA_COMUM
         )
