@@ -112,9 +112,7 @@ class Fase2Tela1(Level):
 
         self.salvar_estado_jogador()
 
-    def desenhar(self, tela):
-        super().desenhar(tela)
-
+    def desenhar_mundo_extra(self, tela):
         tela.blit(self.alavanca_image, self.alavanca_rect)
         if self.pode_desativar_armadilha():
             prompt = self.fonte_prompt.render("[E] Desativar armadilha", True, settings.WHITE)

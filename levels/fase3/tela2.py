@@ -22,8 +22,8 @@ class Fase3Tela2(Level):
     ]
 
     LAYOUT_PLATAFORMAS_MOVEIS = [
-        (470, 460, 110, 40, 360, -0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
-        (660, 360, 110, 40, 460, 0.5, "y", settings.IMAGEM_PLATAFORMA_COMUM),
+        (470, 460, 110, 40, 360, -1, "y", settings.IMAGEM_PLATAFORMA_COMUM),
+        (660, 360, 110, 40, 460, 1, "y", settings.IMAGEM_PLATAFORMA_COMUM),
     ]
 
     def __init__(self, player_state=None):
@@ -40,9 +40,8 @@ class Fase3Tela2(Level):
         a2 = Automato(1080, y_chao - 64, 1000, 1170)
         self.grupo_inimigos.add(a1, a2)
 
-        self.armadilha = ArmadilhaEspinhos(
-            (450, y_chao - 70, 340, 80), caminho_imagem=settings.IMAGEM_ARMADILHA_COMUM
-        )
+        self.armadilha = ArmadilhaEspinhos((450, y_chao - 50, 340, 60))
+        self.armadilha.image.fill(settings.RED)
 
     def atualizar(self):
         super().atualizar()
@@ -55,8 +54,7 @@ class Fase3Tela2(Level):
         if not self.player.esta_vivo():
             self.estado = GameState.GAME_OVER
 
-    def desenhar(self, tela):
-        super().desenhar(tela)
+    def desenhar_mundo_extra(self, tela):
         tela.blit(self.armadilha.image, self.armadilha.rect)
 
     def terminou(self):
