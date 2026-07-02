@@ -176,6 +176,11 @@ class Player(pygame.sprite.Sprite):
         self.movendo = movendo
         self.atualizar_animacao()
 
+        # Arrasta o player junto com a plataforma móvel em que ele está, nos dois eixos. 
+        if isinstance(self.plataforma_atual, PlataformaMovel):
+            self.rect.x += self.plataforma_atual.velocidade_x
+            self.rect.y += self.plataforma_atual.velocidade_y
+
         self.rect.x += self.velocidade_x
         resolver_colisao_x(self, grupo_plataformas)
 
@@ -188,9 +193,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.velocidade_y
         resolver_colisao_y(self, grupo_plataformas)
 
-        if isinstance(self.plataforma_atual, PlataformaMovel):
-            self.rect.x += self.plataforma_atual.velocidade_x
-        
         self.atualizar_ataque()
         self.atualizar_invencibilidade()
 

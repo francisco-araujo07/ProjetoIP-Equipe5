@@ -31,6 +31,18 @@ class Plataforma(pygame.sprite.Sprite):
 def resolver_colisao_x(player, grupo_plataformas):
     colisoes = pygame.sprite.spritecollide(player, grupo_plataformas, False)
     for plat in colisoes:
+        # MTV (menor vetor de translação): compara a sobreposição em X e em Y.
+        # Se a sobreposição vertical é MENOR, o contato é de cima/baixo
+        # (o player está pousando ou batendo a cabeça) — não é colisão
+        # lateral de verdade, então não empurra em X. Sem essa checagem,
+        # qualquer toque vertical (ex: micro-sobreposição da plataforma
+        # móvel) era tratado como colisão lateral e "expelia" o player.
+        sobreposicao_x = min(player.rect.right, plat.rect.right) - max(player.rect.left, plat.rect.left)
+        sobreposicao_y = min(player.rect.bottom, plat.rect.bottom) - max(player.rect.top, plat.rect.top)
+
+        if sobreposicao_y < sobreposicao_x:
+            continue
+
         if player.velocidade_x > 0:
             player.rect.right = plat.rect.left
         elif player.velocidade_x < 0:
@@ -40,6 +52,7 @@ def resolver_colisao_x(player, grupo_plataformas):
 def resolver_colisao_y(player, grupo_plataformas):
     colisoes = pygame.sprite.spritecollide(player, grupo_plataformas, False)
     player.no_chao = False
+    pousou = False
 
     for plat in colisoes:
         if player.velocidade_y > 0:
@@ -47,14 +60,20 @@ def resolver_colisao_y(player, grupo_plataformas):
             player.velocidade_y = 0
             player.no_chao = True
             player.plataforma_atual = plat
+            pousou = True
         elif player.velocidade_y < 0:
             player.rect.top = plat.rect.bottom
             player.velocidade_y = 0
 
+    if not pousou:
+        # Sem isso, plataforma_atual ficava "grudado" na última plataforma
+        # tocada mesmo depois do player pular/cair dela — causando arrasto fantasma
+        player.plataforma_atual = None
+
 class PlataformaMovel(Plataforma):
     def __init__(self, x, y, largura, altura, destino, velocidade, eixo="x", caminho_imagem=None):
         super().__init__(x, y, largura, altura, caminho_imagem)
-        self.eixo = eixo  # "x" ou "y"
+        self.eixo = eixo
         self.velocidade_x = velocidade if eixo == "x" else 0
         self.velocidade_y = velocidade if eixo == "y" else 0
 
