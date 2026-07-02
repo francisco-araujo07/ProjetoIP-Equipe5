@@ -13,6 +13,7 @@ from levels.fase1.tela5 import Fase1Tela5
 from levels.fase2.tela1 import Fase2Tela1
 from levels.fase2.tela2 import Fase2Tela2
 from levels.fase2.tela3 import Fase2Tela3
+from levels.fase3.tela1 import Fase3Tela1
 
 
 class Game:
@@ -25,6 +26,7 @@ class Game:
         Fase2Tela1,
         Fase2Tela2,
         Fase2Tela3,
+        Fase3Tela1,
     ]
 
     def __init__(self):
@@ -74,7 +76,7 @@ class Game:
             else:
                 self.nivel.processar_evento(evento)
                 if evento.type == pygame.KEYDOWN:
-                    if evento.key == pygame.K_ESCAPE:
+                    if evento.key == pygame.K_F11:
                         pygame.display.toggle_fullscreen()
 
     def atualizar(self):

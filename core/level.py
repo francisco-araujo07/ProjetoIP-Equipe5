@@ -74,10 +74,11 @@ class Level:
             plataforma = Plataforma(x, y, largura, altura, caminho_imagem)
             self.plataformas.add(plataforma)
 
-        for entrada in self.LAYOUT_PLATAFORMAS_MOVEIS:  # NOVO
-            x, y, largura, altura, x_final, velocidade = entrada[:6]
-            caminho_imagem = entrada[6] if len(entrada) > 6 else None
-            self.plataformas.add(PlataformaMovel(x, y, largura, altura, x_final, velocidade, caminho_imagem))
+        for entrada in self.LAYOUT_PLATAFORMAS_MOVEIS:  
+            x, y, largura, altura, destino, velocidade = entrada[:6]
+            eixo = entrada[6] if len(entrada) > 6 else "x"
+            caminho_imagem = entrada[7] if len(entrada) > 7 else None
+            self.plataformas.add(PlataformaMovel(x, y, largura, altura, destino, velocidade, eixo, caminho_imagem))
 
     def processar_evento(self, evento):
         if self.dialogo_ativo:
