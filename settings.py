@@ -35,6 +35,7 @@ SPRITE_ESPADA_COLETAVEL = "assets/coletavel/espada.png"
 ESPADA_COLETAVEL_ALTURA = 150
 ESPADA_COLETAVEL_ROTACAO = -60
 SPRITE_ALAVANCA = "assets/fase2/alavanca.png"
+SPRITE_ALAVANCA_PRESSIONADA = "assets/fase2/alavanca-pressionada.png"  
 ALAVANCA_ALTURA = 96
 IMAGEM_PLATAFORMA_COMUM = "assets/comum/plataforma.png"
 ICONE_HUD_CORACAO_CHEIO = "assets/hud/coracao.png"
@@ -93,6 +94,7 @@ TYPEWRITER_LETRAS_POR_SEGUNDO = 30
 # --- Telas de resultado ---
 TECLA_REINICIAR_JOGO = "r"
 TECLA_SAIR_JOGO = "escape"
+TECLA_PAUSAR = "escape"
 FONTE_TITULO_RESULTADO = 96
 FONTE_TEXTO_RESULTADO = 36
 
