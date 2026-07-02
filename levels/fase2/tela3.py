@@ -41,7 +41,7 @@ class Fase2Tela3(Level):
         self.grupo_inimigos.add(s1, s2)
 
     def _carregar_imagem_fragmento(self):
-        imagem = pygame.image.load(self.IMAGEM_FRAGMENTO).convert_alpha()
+        imagem = pygame.image.load(settings.IMAGEM_FRAGMENTO).convert_alpha()
         tamanho = (settings.FRAGMENTO_CHAVE_TAMANHO, settings.FRAGMENTO_CHAVE_TAMANHO)
         imagem = pygame.transform.smoothscale(imagem, tamanho)
         return pygame.transform.rotate(imagem, settings.FRAGMENTO_CHAVE_ROTACAO)

@@ -20,36 +20,76 @@ class ResultScreen:
         self.estado = estado
         self.reiniciar_solicitado = False
         self.sair_solicitado = False
+        
         self.fonte_titulo = pygame.font.Font(None, settings.FONTE_TITULO_RESULTADO)
         self.fonte_texto = pygame.font.Font(None, settings.FONTE_TEXTO_RESULTADO)
+        
+        # Carrega a arte customizada apenas se o jogador perder
+        if self.estado == GameState.GAME_OVER:
+            self.background = pygame.image.load("assets/game_over/game_over.png").convert()
+            self.background = pygame.transform.scale(self.background, (settings.LARGURA_TELA, settings.ALTURA_TELA))
+            
+            # Caixas de colisão invisíveis calibradas sobre os botões de game_over.png
+            self.rect_reiniciar = pygame.Rect(440, 495, 400, 85)  # "TENTAR NOVAMENTE"
+            self.rect_sair = pygame.Rect(440, 605, 400, 80)       # "RETORNAR AO MENU"
+            self.cor_seletor = (212, 175, 55)                     # Dourado para o hover
 
     def processar_evento(self, evento):
-        if evento.type != pygame.KEYDOWN:
-            return
+        # 1. Processamento por clique de mouse (Apenas no Game Over)
+        if self.estado == GameState.GAME_OVER:
+            if evento.type == pygame.MOUSEBUTTONDOWN and evento.button == 1:
+                posicao_mouse = pygame.mouse.get_pos()
+                if self.rect_reiniciar.collidepoint(posicao_mouse):
+                    self.reiniciar_solicitado = True
+                    return
+                elif self.rect_sair.collidepoint(posicao_mouse):
+                    self.sair_solicitado = True
+                    return
 
-        tecla_reiniciar = pygame.key.key_code(settings.TECLA_REINICIAR_JOGO)
-        tecla_sair = pygame.key.key_code(settings.TECLA_SAIR_JOGO)
+        # 2. Mantém o suporte original por teclado para ambos os estados
+        if evento.type == pygame.KEYDOWN:
+            tecla_reiniciar = pygame.key.key_code(settings.TECLA_REINICIAR_JOGO)
+            tecla_sair = pygame.key.key_code(settings.TECLA_SAIR_JOGO)
 
-        if evento.key == tecla_reiniciar:
-            self.reiniciar_solicitado = True
-        elif evento.key in (tecla_sair, pygame.K_q):
+            if evento.key == tecla_reiniciar:
+                self.reiniciar_solicitado = True
+            elif evento.key in (tecla_sair, pygame.K_q):
+                self.sair_solicitado = True
+
+        # Se o usuário apertar ESC na tela de fim de jogo, também retorna/sai
+        if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
             self.sair_solicitado = True
 
     def desenhar(self, tela):
-        tela.fill(settings.BLACK)
+        if self.estado == GameState.GAME_OVER:
+            posicao_mouse = pygame.mouse.get_pos()
+            
+            # Desenha o plano de fundo completo gerado pela IA
+            tela.blit(self.background, (0, 0))
+            
+            # Desenha os triângulos indicadores de foco (Hover) nas laterais dos botões
+            if self.rect_reiniciar.collidepoint(posicao_mouse):
+                pygame.draw.polygon(tela, self.cor_seletor, [(400, 525), (400, 545), (420, 535)])
+                pygame.draw.polygon(tela, self.cor_seletor, [(880, 525), (880, 545), (860, 535)])
+            elif self.rect_sair.collidepoint(posicao_mouse):
+                pygame.draw.polygon(tela, self.cor_seletor, [(400, 630), (400, 650), (420, 640)])
+                pygame.draw.polygon(tela, self.cor_seletor, [(880, 630), (880, 650), (860, 640)])
+        else:
+            # Mantém o comportamento em texto original para o estado de Vitória (WIN)
+            tela.fill(settings.BLACK)
 
-        textos = self.TEXTOS[self.estado]
-        titulo = self.fonte_titulo.render(textos["titulo"], True, settings.WHITE)
-        mensagem = self.fonte_texto.render(textos["mensagem"], True, settings.WHITE)
-        opcoes = self.fonte_texto.render(
-            f"[{settings.TECLA_REINICIAR_JOGO.upper()}] Reiniciar   [Esc/Q] Sair",
-            True,
-            settings.GRAY,
-        )
+            textos = self.TEXTOS[self.estado]
+            titulo = self.fonte_titulo.render(textos["titulo"], True, settings.WHITE)
+            mensagem = self.fonte_texto.render(textos["mensagem"], True, settings.WHITE)
+            opcoes = self.fonte_texto.render(
+                f"[{settings.TECLA_REINICIAR_JOGO.upper()}] Reiniciar   [Esc/Q] Sair",
+                True,
+                settings.GRAY,
+            )
 
-        centro_x = settings.LARGURA_TELA // 2
-        centro_y = settings.ALTURA_TELA // 2
+            centro_x = settings.LARGURA_TELA // 2
+            centro_y = settings.ALTURA_TELA // 2
 
-        tela.blit(titulo, titulo.get_rect(center=(centro_x, centro_y - 90)))
-        tela.blit(mensagem, mensagem.get_rect(center=(centro_x, centro_y)))
-        tela.blit(opcoes, opcoes.get_rect(center=(centro_x, centro_y + 70)))
+            tela.blit(titulo, titulo.get_rect(center=(centro_x, centro_y - 90)))
+            tela.blit(mensagem, mensagem.get_rect(center=(centro_x, centro_y)))
+            tela.blit(opcoes, opcoes.get_rect(center=(centro_x, centro_y + 70)))
