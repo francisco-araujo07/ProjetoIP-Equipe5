@@ -1,197 +1,135 @@
-<br />
-<p align="center">
-  <!-- Substitua pela logo/imagem do projeto -->
-  <h2 align="center"> Phyntom </h2>
-  <h3 align="center">Projeto de jogo com Python e Programação Orientada a Objetos (POO)</h3>
+<div align="center">
 
-  <p align="center">
-    CIn UFPE | Junho 2026 | Introdução à Programação (IP)
-    <br />
-    <a href="[https://github.com/francisco-araujo07/ProjetoIP-Pygame]"><strong>Explorar o repositório »</strong></a>
-    <br />
-  </p>
+<img src="assets/screenshots/tela_inicial.png" alt="Gilded Shadows" width="600"/>
+
+# ⚔️ Gilded Shadows
+
+<p>
+  <img src="https://img.shields.io/badge/Python-3.13+-blue?logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/pygame--ce-2.5+-green?logo=pygame&logoColor=white" alt="pygame-ce"/>
+  <img src="https://img.shields.io/badge/status-conclu%C3%ADdo-success" alt="status"/>
 </p>
 
----
+Jogo 2D desenvolvido em Python + pygame-ce, projeto da disciplina de Introdução à Programação.
 
-## Sumário
-
-1. [Colaboradores](#colaboradores)
-2. [Divisão do Time](#divisão-do-time)
-3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
-4. [Estrutura de Arquivos](#estrutura-de-arquivos)
-5. [Instalação](#instalação)
-6. [Como Executar](#como-executar)
-7. [Sobre o Processo](#sobre-o-processo)
-8. [Conceitos de Programação Aplicados](#conceitos-de-programação-aplicados)
-9. [Galeria do Jogo](#galeria-do-jogo)
-10. [Contato](#contato)
+</div>
 
 ---
 
-## Colaboradores
+## 👥 Equipe
 
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/francisco-araujo07"><img src="https://avatars.githubusercontent.com/u/195521025?v=4" width="100px;" alt=""/><br /><sub><b>[Francisco Estevão]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/pedroaugustobpaz-tech"><img src="https://avatars.githubusercontent.com/u/276592914?v=4" width="100px;" alt=""/><br /><sub><b>[Pedro Augusto]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/fgbg-cin"><img src="https://avatars.githubusercontent.com/u/290041884?v=4" width="100px;" alt=""/><br /><sub><b>[Francisco Gabriel]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/MatheusAgra"><img src="https://avatars.githubusercontent.com/u/163215063?v=4" width="100px;" alt=""/><br /><sub><b>[Matheus Agra]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/Jrmlcin"><img src="https://avatars.githubusercontent.com/u/267380926?v=4" width="100px;" alt=""/><br /><sub><b>[João Ricardo]</b></sub></a></td>
-    <td align="center"><a href="https://github.com/agtm-tech"><img src="https://avatars.githubusercontent.com/u/266768504?v=4" width="100px;" alt=""/><br /><sub><b>[Alam Menezes]</b></sub></a></td>
-  </tr>
+<tr><th>Membro</th><th>Responsabilidade</th></tr>
+<tr><td><b>Francisco Estevão</b></td><td>Logística do <code>game.py</code> e estrutura dos levels</td></tr>
+<tr><td><b>Francisco Gabriel</b></td><td>Sprites, funções iniciais/finais e suas telas</td></tr>
+<tr><td><b>Pedro Augusto</b></td><td>Lore e mecânica dos coletáveis</td></tr>
+<tr><td><b>Matheus Agra</b></td><td>Divisão de tasks; mecânica do player e inimigos</td></tr>
+<tr><td><b>João Ricardo</b></td><td>Mecânicas de coletáveis e lógica interna das fases</td></tr>
+<tr><td><b>Alam Menezes</b></td><td>Colisão e plataformas fixas/móveis</td></tr>
 </table>
 
 ---
 
-## Divisão do Time
+## 🏗️ Arquitetura
+
+<details>
+<summary><b>Ver estrutura de pastas</b></summary>
+
+```
+PROJETOIP-EQUIPE5/
+├── assets/                  # Sprites, sons e imagens
+├── classes/                 # Entidades (POO)
+│   ├── armadilha.py
+│   ├── coletavel.py
+│   ├── enemy.py
+│   ├── plataforma.py
+│   └── player.py
+├── core/                    # Engine / estado do jogo
+│   ├── game.py               # Loop principal
+│   ├── game_state.py         # Estado geral da partida
+│   ├── level.py               # Lógica das fases
+│   ├── menu.py                 # Tela inicial
+│   ├── player_state.py         # Estado do player (HP, itens)
+│   └── result_screen.py        # Telas de vitória/derrota
+├── guia/                    # Planejamento técnico interno
+├── levels/                  # Dados/configuração das fases
+├── main.py                  # Entry point
+├── settings.py               # Configurações globais
+├── requirements.txt
+├── FLUXO_JOGO.md             # Fluxograma de planejamento
+└── README.md
+```
+
+</details>
+
+**Separação de responsabilidades:** `classes/` = entidades (dados + comportamento); `core/` = engine (loop, estados, transições). `guia/` e `FLUXO_JOGO.md` documentam o planejamento adotado após o replanejamento do projeto.
+
+> `main_teste.py` e `teste.plataforma_movel.py` — scripts de debug, sem função no build final.
+
+---
+
+## 🛠️ Stack
 
 <table>
-  <tr>
-    <td align="left">
-      <li><b>Francisco Estevão:</b> [Descreva as responsabilidades]</li>
-      <li><b>Pedro Augusto:</b> [Descreva as responsabilidades]</li>
-      <li><b>Francisco Gabriel:</b> [Descreva as responsabilidades]</li>
-      <li><b>Matheus Agra:</b> [Descreva as responsabilidades]</li>
-      <li><b>João Ricardo:</b> [Descreva as responsabilidades]</li>
-      <li><b>Alam Menezes:</b> [Descreva as responsabilidades]</li>
-    </td>
-  </tr>
+<tr><th>Tecnologia</th><th>Justificativa</th></tr>
+<tr><td><b>Python</b></td><td>Linguagem base da disciplina</td></tr>
+<tr><td><b>pygame-ce</b></td><td>Fork ativo do pygame; usado por incompatibilidade do pygame original com Python 3.13+</td></tr>
+<tr><td><b>os</b></td><td>Manipulação de caminhos de arquivos de áudio e imagem</td></tr>
 </table>
 
 ---
 
-## Tecnologias Utilizadas
+## 🖼️ Galeria
 
-- [Python 3.13.1](https://www.python.org/)
-- [Pygame 2.6.1](https://www.pygame.org/wiki/GettingStarted)
-- [OS](https://python.readthedocs.io/en/stable/library/os.html)
-
-### Por que Pygame?
-
-- Ampla documentação e repositórios de aprendizado disponíveis online.
-- Facilidade para criação de superfícies e posicionamento de sprites com `rect`.
-- Funções nativas de colisão entre objetos.
-- Gerenciamento simples de eventos do jogo.
-
-### Por que OS?
-
-- Utilizado exclusivamente para manipulação de caminhos de arquivos de imagem e áudio via `os.path`.
-
----
-
-## Estrutura de Arquivos
-
-```
-/assets
-    Imagens separadas por categoria
-
-/classes
-    Classes e lógica dos elementos do jogo (POO)
-
-/constants
-    Constantes globais usadas no fluxo do jogo
-
-/levels
-    Dados dos mapas de cada fase
-
-/sound
-    Músicas e efeitos sonoros
-
-/Gameplay.py
-    Lógica principal do fluxo do jogo
-
-/Game.py
-    Arquivo principal (entry point)
-```
+<div align="center">
+<table>
+<tr>
+<td><img src="assets/screenshots/tela_inicial.png" width="400"/><br/><sub>Tela inicial</sub></td>
+<td><img src="assets/screenshots/assalto_falhou.png" width="400"/><br/><sub>Derrota</sub></td>
+</tr>
+<tr>
+<td><img src="assets/screenshots/gameplay_sala_chave.png" width="400"/><br/><sub>Gameplay: sala da chave</sub></td>
+<td><img src="assets/screenshots/gameplay_santuario.png" width="400"/><br/><sub>Gameplay: santuário</sub></td>
+</tr>
+<tr>
+<td colspan="2" align="center"><img src="assets/screenshots/vitoria.png" width="400"/><br/><sub>Vitória</sub></td>
+</tr>
+</table>
+</div>
 
 ---
 
-## Instalação
+## 📚 Conceitos da Disciplina Aplicados
 
-1. Clone o repositório
-
-```sh
-git clone [LINK DO REPOSITÓRIO]
-```
-
-2. Instale as dependências
-
-```sh
-pip install -r requirements.txt
-```
-
-> Use `pip3` se o sistema tiver múltiplas versões de Python instaladas.
+<table>
+<tr><th>Conceito</th><th>Onde foi usado</th></tr>
+<tr><td><b>Laços de repetição</b></td><td><code>core/game.py</code> — loop principal, atualiza entidades a cada frame</td></tr>
+<tr><td><b>Condicionais</b></td><td>Colisão/movimento em <code>classes/player.py</code>, <code>enemy.py</code>, <code>plataforma.py</code>; verificação de HP/itens em <code>core/player_state.py</code></td></tr>
+<tr><td><b>Funções</b></td><td>Modularização — um comportamento por arquivo em <code>classes/</code> e <code>core/</code></td></tr>
+<tr><td><b>POO</b></td><td><code>classes/player.py</code> (Player), <code>enemy.py</code> (Enemy), <code>coletavel.py</code> (Coletável), <code>armadilha.py</code> (Armadilha), <code>plataforma.py</code> (Plataforma)</td></tr>
+</table>
 
 ---
 
-## Como Executar
+## 🧩 Desafios e Lições Aprendidas
 
-1. No terminal, navegue até a pasta raiz do projeto
-2. Execute:
+<details>
+<summary><b>Maior erro cometido</b></summary>
+<br/>
+Começar a codar antes de finalizar o planejamento visual do jogo e das fases. Solução: descarte do código inicial e reinício com planejamento prévio (documentado em <code>guia/</code> e <code>FLUXO_JOGO.md</code>).
+</details>
 
-```sh
-python Game.py
-```
+<details>
+<summary><b>Maior desafio enfrentado</b></summary>
+<br/>
+Trabalho em equipe com 6 pessoas em módulos interdependentes. Resolvido com comunicação mais clara e divisão de tasks.
+</details>
 
-> Use `python3 Game.py` se necessário.
+<details>
+<summary><b>Lições aprendidas</b></summary>
+<br/>
 
----
+- Planejamento pré-desenvolvimento é essencial para alinhamento do objetivo final.
+- Gestão de tempo e divisão de tasks evita sobrecarga individual.
 
-## Sobre o Processo
-
-| Desafio principal | Como lidamos |
-|---|---|
-| [Ex.: Controle de versão com Git] | [Ex.: Sessões de alinhamento em equipe] |
-| [Ex.: Distribuição de tarefas] | [Ex.: Comunicação assíncrona via Discord/WhatsApp] |
-
-| Erros cometidos | Como corrigimos |
-|---|---|
-| [Ex.: Falta de reuniões frequentes] | [Ex.: Comunicação ativa e divisão clara de atividades] |
-
-**Lições aprendidas:**
-- Trabalho assíncrono
-- Importância do trabalho em equipe e comunicação ativa
-- Compartilhamento de conhecimento
-- Controle de versão com Git e GitHub
-- Recursos do Python e Pygame
-- Programação Orientada a Objetos (POO)
-
----
-
-## Conceitos de Programação Aplicados
-
-- **POO:** Classes, herança, encapsulamento, polimorfismo
-- **Operadores lógicos e relacionais / Comandos condicionais**
-- **Laços de repetição (loops)**
-- **Listas**
-- **Funções**
-
-> Confira a documentação detalhada em: [Link do documento de conceitos]
-
----
-
-## Galeria do Jogo
-
-> *Adicione screenshots aqui após o desenvolvimento*
-
----
-
-## Contribuindo
-
-1. Fork o projeto
-2. Crie sua branch (`git checkout -b feature/nomeDaFeature`)
-3. Commit suas mudanças (`git commit -m 'Add nomeDaFeature'`)
-4. Push para a branch (`git push origin feature/nomeDaFeature`)
-5. Abra um Pull Request
-
----
-
-## Contato
-
-- Francisco Estevão — fela@cin.ufpe.br
-- Pedro Augusto     —  pabpa@cin.ufpe.br
-- Francisco Gabriel — fgbg@cin.ufpe.br
-- Matheus Agra      — mesa2@cin.ufpe.br
-- João Ricardo      — jrml@cin.ufpe.br
-- Alam Menezes      — agtm@cin.ufpe.br
+</details>
